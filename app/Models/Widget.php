@@ -34,7 +34,7 @@ class Widget extends Model
     public static function heroSidePanelDefaultImageCandidates(): array
     {
         return [
-            'https://images.unsplash.com/photo-1559027615-cd462890ce6a?auto=format&fit=crop&w=1800&h=1200&q=82',
+            'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1800&h=1200&q=82',
             'https://images.unsplash.com/photo-1593113598338-cbff28882e07?auto=format&fit=crop&w=1800&h=1200&q=82',
             'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1800&h=1200&q=82',
             'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=1800&h=1200&q=82',
@@ -60,7 +60,7 @@ class Widget extends Model
     /**
      * @deprecated Use {@see heroSidePanelDefaultImageUrl()}. Kept so older migrations that reference this constant keep resolving.
      */
-    public const HERO_SIDE_PANEL_DEFAULT_IMAGE_URL = 'https://images.unsplash.com/photo-1559027615-cd462890ce6a?auto=format&fit=crop&w=1800&h=1200&q=82';
+    public const HERO_SIDE_PANEL_DEFAULT_IMAGE_URL = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1800&h=1200&q=82';
 
     /** Stat cards in the impact outcomes widget. */
     public const IMPACT_STAT_CARD_SLOTS = 3;
@@ -76,6 +76,9 @@ class Widget extends Model
 
     /** Social icon slots in the site footer widget. */
     public const SITE_FOOTER_MAX_SOCIAL = 8;
+
+    /** Link rows for CMS “lead” layout CTAs in admin. */
+    public const CMS_LEAD_MAX_CTAS = 6;
 
     protected $fillable = [
         'slug',
@@ -93,6 +96,10 @@ class Widget extends Model
         return $this->belongsTo(CmsPage::class);
     }
 
+    /**
+     * JSON settings: home/footer widgets use structured keys; CMS widgets may set `cms_layout`
+     * to a Blade name under `resources/views/widgets/cms/` (see CmsLayoutWidgetsSeeder).
+     */
     protected $casts = [
         'is_active' => 'boolean',
         'settings' => 'array',
@@ -118,7 +125,8 @@ class Widget extends Model
             return trim($url);
         }
 
-        return null;
+        // Fallback to a curated stock image if nothing is configured
+        return self::heroSidePanelDefaultImageUrl();
     }
 
     /**
@@ -222,6 +230,7 @@ class Widget extends Model
             'hero_gradient_2' => '#6f5f52',
             'hero_gradient_3' => '#555c52',
             'hero_overlay' => 0.46,
+            'hero_bg_external_url' => self::HERO_SIDE_PANEL_DEFAULT_IMAGE_URL,
             'hero_side_panel_external_url' => '',
             'hero_slides' => self::defaultHeroSlides(),
             'hero_slide_interval' => 6,

@@ -18,7 +18,7 @@
         @endforeach
     </select>
     @error('zone')<span class="error">{{ $message }}</span>@enderror
-    <span class="muted" style="font-weight:400">{{ __('“CMS page” blocks appear below the HTML body on the matching published page (/page/slug).') }}</span>
+    <span class="muted" style="font-weight:400">{{ __('“CMS page” blocks appear on the matching published page (/page/slug). Set <code>settings.cms_layout</code> (e.g. lead, pillars_trio, impact_intro) for structured layouts, or omit it for a simple HTML block.') }}</span>
 </label>
 
 <label class="field" id="widget-cms-page-field">
@@ -33,9 +33,12 @@
     </select>
     @error('cms_page_id')<span class="error">{{ $message }}</span>@enderror
 </label>
+
+@include('admin.widgets.cms-zone-fields', ['widget' => $widget ?? null])
+
 <label class="field">
-    <span>{{ __('Content (HTML allowed)') }}</span>
-    <textarea name="content" class="code" rows="10">{{ old('content', optional($widget)->content) }}</textarea>
+    <span>{{ __('Content') }}</span>
+    <textarea name="content" class="richtext" rows="10">{{ old('content', optional($widget)->content) }}</textarea>
     @error('content')<span class="error">{{ $message }}</span>@enderror
     <span class="muted" style="font-weight:400">{{ __('For “home-hero”, put headline and body copy here; appearance and banners use the sections below. For “home-impact-stats”, “home-voices”, and “home-join-movement”, headings and CTAs use the sections below — this field is optional. For “site-footer”, use the footer section below — content here is optional.') }}</span>
 </label>

@@ -94,99 +94,69 @@
             border-radius: 8px;
         }
 
-        /* ── Hero: mud / earth tones (uses widget CSS variables) ── */
+        /* ── Hero: immersive full-width banner ── */
         .mukmin-hero {
+            position: relative;
             background:
                 radial-gradient(ellipse 120% 90% at 50% -12%, rgba(230, 224, 216, 0.55) 0%, rgba(120, 108, 98, 0.12) 38%, transparent 64%),
                 linear-gradient(162deg, var(--mukmin-hero-g1) 0%, var(--mukmin-hero-g2) 48%, var(--mukmin-hero-g3) 100%);
             color: #fff;
-            min-height: min(78vh, 740px);
+            min-height: min(45vh, 440px);
+            overflow: hidden;
         }
 
         .mukmin-hero__photo {
-            opacity: 0.78;
-            filter: saturate(0.95) contrast(1.05) brightness(0.98);
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 1;
+            z-index: 0;
         }
 
         .mukmin-hero__gradient {
+            position: absolute;
+            inset: 0;
             background:
-                linear-gradient(198deg, rgba(210, 200, 190, 0.22) 0%, rgba(95, 85, 75, 0.12) 36%, transparent 68%),
-                linear-gradient(160deg, var(--mukmin-hero-g1) 0%, var(--mukmin-hero-g2) 48%, var(--mukmin-hero-g3) 100%);
-            opacity: var(--mukmin-hero-overlay);
+                linear-gradient(to top, rgba(15, 61, 44, 0.85) 0%, rgba(15, 61, 44, 0.5) 50%, rgba(0,0,0,0.15) 100%);
+            opacity: 1;
+            z-index: 1;
         }
 
         .mukmin-hero:has(.mukmin-hero__photo) .mukmin-hero__gradient {
-            opacity: clamp(0.32, calc(var(--mukmin-hero-overlay) * 0.82), 0.52);
+            opacity: 1;
         }
 
         .mukmin-hero__vignette {
+            position: absolute;
+            inset: 0;
             background:
-                radial-gradient(ellipse 100% 54% at 50% 0%, rgba(240, 235, 228, 0.28), transparent 54%),
-                radial-gradient(ellipse 88% 72% at 50% 108%, rgba(45, 42, 38, 0.12), transparent 58%);
+                radial-gradient(ellipse 100% 54% at 50% 0%, rgba(240, 235, 228, 0.12), transparent 54%),
+                radial-gradient(ellipse 88% 72% at 50% 108%, rgba(15, 61, 44, 0.25), transparent 58%);
+            z-index: 1;
         }
 
         .mukmin-hero:has(.mukmin-hero__photo) .mukmin-hero__vignette {
             background:
-                radial-gradient(ellipse 96% 50% at 50% 0%, rgba(225, 218, 208, 0.28), transparent 52%),
-                linear-gradient(to bottom, rgba(75, 68, 60, 0.14) 0%, transparent 48%),
-                radial-gradient(ellipse 90% 76% at 50% 110%, rgba(25, 22, 18, 0.18), transparent 62%);
+                radial-gradient(ellipse 96% 50% at 50% 0%, rgba(225, 218, 208, 0.12), transparent 52%),
+                radial-gradient(ellipse 90% 76% at 50% 110%, rgba(15, 61, 44, 0.3), transparent 62%);
         }
 
+        /* Side-panel now hidden — photo is full-bleed background */
         .mukmin-hero__side-panel {
-            position: absolute;
-            z-index: 2;
-            left: var(--mukmin-side-panel-left, calc(50% + clamp(4.5rem, 11.5vw, 10rem)));
-            right: clamp(0.45rem, 1.75vw, 1.35rem);
-            width: auto;
-            top: clamp(3rem, 7.5vh, 5rem);
-            height: min(68vh, 34rem);
-            margin: 0;
-            padding: 0;
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            border-radius: 1.15rem;
-            overflow: hidden;
-            pointer-events: none;
-            opacity: 0.86;
-            box-shadow:
-                0 1.25rem 2.25rem rgba(18, 14, 12, 0.22),
-                inset 0 1px 0 rgba(255, 255, 255, 0.14);
+            display: none;
         }
 
-        .mukmin-hero__side-panel__img {
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center 42%;
-            opacity: 0.97;
-            filter: saturate(1.02) contrast(1.04) brightness(1.02);
-        }
-
-        .mukmin-hero__side-panel__scrim {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(195deg, rgba(236, 253, 245, 0.18) 0%, transparent 50%, rgba(15, 60, 52, 0.14) 100%);
-            opacity: 0.4;
-        }
-
+        .mukmin-hero__side-panel__img,
+        .mukmin-hero__side-panel__scrim,
         .mukmin-hero__side-panel-origin {
-            display: inline;
-            width: 0;
-            height: 0;
-            margin: 0;
-            padding: 0;
-            vertical-align: baseline;
-            pointer-events: none;
-        }
-
-        @media (max-width: 899px) {
-            .mukmin-hero__side-panel {
-                display: none;
-            }
+            display: none;
         }
 
         /* Headline typography: white with gradient accent */
         .mukmin-hero__headline {
             color: #ffffff;
+            font-family: var(--font-hero-display);
             font-size: clamp(2.2rem, 6vw, 3.8rem);
             font-weight: 800;
             text-shadow:
@@ -195,9 +165,15 @@
         }
 
         /* CMS-body content inside hero (h1/h2/p rendered from widget content) */
+        .mukmin-hero__inner {
+            position: relative;
+            z-index: 3;
+        }
+
         .mukmin-hero__inner h1,
         .mukmin-hero__inner h2 {
             color: #ffffff !important;
+            font-family: var(--font-hero-display);
             font-weight: 800;
             font-size: clamp(2.2rem, 6vw, 3.6rem);
             text-shadow:
@@ -221,6 +197,16 @@
         .mukmin-hero__sub {
             color: rgba(255, 255, 255, 0.85);
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .mukmin-hero__cta {
+            position: relative;
+            z-index: 3;
+        }
+
+        .mukmin-hero__banners {
+            position: relative;
+            z-index: 3;
         }
 
         /* Carousel cards: premium floating effect */

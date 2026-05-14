@@ -16,8 +16,8 @@
     @error('excerpt')<span class="error">{{ $message }}</span>@enderror
 </label>
 <label class="field">
-    <span>{{ __('Body (HTML allowed)') }}</span>
-    <textarea name="body" class="code" rows="14">{{ old('body', optional($page)->body) }}</textarea>
+    <span>{{ __('Body') }}</span>
+    <textarea name="body" class="richtext" rows="14">{{ old('body', optional($page)->body) }}</textarea>
     @error('body')<span class="error">{{ $message }}</span>@enderror
     <span class="muted" style="font-weight:400">{{ __('Ignored on the public site when “Widgets only” is enabled below.') }}</span>
 </label>

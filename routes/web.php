@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CmsPageController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ImageUploadController;
 use App\Http\Controllers\Admin\MenuItemController;
 use App\Http\Controllers\Admin\SiteConfigurationController;
 use App\Http\Controllers\Admin\WidgetController;
@@ -29,4 +30,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('menu-items', MenuItemController::class)->except(['show']);
     Route::resource('cms-pages', CmsPageController::class)->except(['show']);
     Route::resource('widgets', WidgetController::class)->except(['show']);
+
+    Route::post('/upload-image', [ImageUploadController::class, 'store'])->name('upload-image');
 });

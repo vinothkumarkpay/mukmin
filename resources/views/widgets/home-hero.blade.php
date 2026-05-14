@@ -30,7 +30,7 @@
     aria-labelledby="mukmin-hero-heading"
 >
     @if ($bgUrl)
-        <div class="mukmin-hero__photo" style="background-image: url({{ json_encode($bgUrl) }});" role="presentation"></div>
+        <div class="mukmin-hero__photo" style="background-image: url('{{ e($bgUrl) }}');" role="presentation"></div>
     @endif
     <div class="mukmin-hero__gradient" aria-hidden="true"></div>
     <div class="mukmin-hero__vignette" aria-hidden="true"></div>

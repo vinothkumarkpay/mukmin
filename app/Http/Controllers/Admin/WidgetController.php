@@ -59,6 +59,10 @@ class WidgetController extends Controller
         if ($slug === Widget::SITE_FOOTER_SLUG) {
             $validated['settings'] = $this->syncSiteFooterSettings($request, null);
         }
+        if (($validated['zone'] ?? '') === 'cms') {
+            $base = $validated['settings'] ?? [];
+            $validated['settings'] = $this->syncCmsZoneSettingsFromRequest($request, is_array($base) ? $base : []);
+        }
         $validated = $this->onlyWidgetColumns($validated);
 
         $widget = Widget::query()->create($validated);
@@ -103,7 +107,18 @@ class WidgetController extends Controller
         if ($slug === Widget::SITE_FOOTER_SLUG) {
             $validated['settings'] = $this->syncSiteFooterSettings($request, $widget);
         }
+        if (($validated['zone'] ?? '') === 'cms') {
+            $base = $validated['settings'] ?? null;
+            if (! is_array($base)) {
+                $base = $widget->settings ?? [];
+            }
+            $validated['settings'] = $this->syncCmsZoneSettingsFromRequest($request, $base);
+        }
         $validated = $this->onlyWidgetColumns($validated);
+
+        if (($validated['settings'] ?? null) === null && $slug === $widget->slug) {
+            $validated['settings'] = $widget->settings;
+        }
 
         $widget->update($validated);
 
@@ -241,6 +256,20 @@ class WidgetController extends Controller
                 $rules["footer_social.$i.label"] = ['nullable', 'string', 'max:120'];
                 $rules["footer_social.$i.new_tab"] = ['sometimes', 'boolean'];
             }
+        }
+
+        $rules['cms_layout_template'] = ['nullable', 'string', 'in:html,lead,custom'];
+        $rules['cms_lead_image_url'] = ['nullable', 'string', 'max:2048'];
+        $rules['cms_lead_eyebrow'] = ['nullable', 'string', 'max:500'];
+        $rules['cms_lead_headline'] = ['nullable', 'string', 'max:500'];
+        $rules['cms_lead_subheadline'] = ['nullable', 'string', 'max:1000'];
+        $rules['cms_lead_variant'] = ['nullable', 'string', 'in:surface,muted,gradient'];
+        $rules['cms_lead_suppress_title'] = ['sometimes', 'boolean'];
+        foreach (range(0, Widget::CMS_LEAD_MAX_CTAS - 1) as $i) {
+            $rules["cms_lead_ctas.$i.label"] = ['nullable', 'string', 'max:120'];
+            $rules["cms_lead_ctas.$i.url"] = ['nullable', 'string', 'max:2048'];
+            $rules["cms_lead_ctas.$i.style"] = ['nullable', 'string', 'in:primary,ghost'];
+            $rules["cms_lead_ctas.$i.new_tab"] = ['sometimes', 'boolean'];
         }
 
         $validated = $request->validate($rules);
@@ -748,9 +777,79 @@ class WidgetController extends Controller
         return isset($data['cms_page_id']) ? (int) $data['cms_page_id'] : null;
     }
 
+    /**
+     * Merge CMS zone widgets: layout template (html / lead / custom) and lead-block fields into settings.
+     *
+     * @param  array<string, mixed>  $base
+     * @return array<string, mixed>
+     */
+    protected function syncCmsZoneSettingsFromRequest(Request $request, array $base): array
+    {
+        $template = (string) $request->input('cms_layout_template', '');
+        if ($template === '') {
+            $cur = (string) data_get($base, 'cms_layout', '');
+            $template = in_array($cur, ['html', 'lead'], true) ? $cur : 'custom';
+        }
+        if ($template === 'custom') {
+            return $base;
+        }
+        if ($template === 'html') {
+            $out = $base;
+            $out['cms_layout'] = 'html';
+            foreach (['eyebrow', 'headline', 'subheadline', 'variant', 'suppress_title', 'ctas'] as $k) {
+                unset($out[$k]);
+            }
+
+            return $out;
+        }
+
+        $out = $base;
+        $out['cms_layout'] = 'lead';
+        $out['image_url'] = trim((string) $request->input('cms_lead_image_url', ''));
+        $out['eyebrow'] = trim((string) $request->input('cms_lead_eyebrow', ''));
+        $out['headline'] = trim((string) $request->input('cms_lead_headline', ''));
+        $out['subheadline'] = trim((string) $request->input('cms_lead_subheadline', ''));
+        $variant = strtolower((string) $request->input('cms_lead_variant', 'surface'));
+        if (! in_array($variant, ['surface', 'muted', 'gradient'], true)) {
+            $variant = 'surface';
+        }
+        $out['variant'] = $variant;
+        $out['suppress_title'] = $request->boolean('cms_lead_suppress_title');
+
+        $ctas = [];
+        foreach (range(0, Widget::CMS_LEAD_MAX_CTAS - 1) as $i) {
+            $row = $request->input('cms_lead_ctas.'.$i, []);
+            if (! is_array($row)) {
+                continue;
+            }
+            $label = trim((string) ($row['label'] ?? ''));
+            $url = trim((string) ($row['url'] ?? ''));
+            if ($label === '' || $url === '') {
+                continue;
+            }
+            $this->assertValidNavUrl($url, "cms_lead_ctas.$i.url");
+            $style = strtolower((string) ($row['style'] ?? 'primary'));
+            if (! in_array($style, ['primary', 'ghost'], true)) {
+                $style = 'primary';
+            }
+            $ctas[] = [
+                'label' => $label,
+                'url' => $url,
+                'style' => $style,
+                'new_tab' => ! empty($row['new_tab']),
+            ];
+        }
+        $out['ctas'] = $ctas;
+
+        return $out;
+    }
+
     protected function assertValidNavUrl(string $link, string $errorKey): void
     {
         if ($link === '' || $link === '#') {
+            return;
+        }
+        if (str_starts_with(strtolower($link), 'mailto:')) {
             return;
         }
         if (! preg_match('#^https?://#i', $link) && ! str_starts_with($link, '/')) {

@@ -24,44 +24,44 @@ class PortalSeeder extends Seeder
             [
                 'slug' => 'about-mukmin',
                 'title' => 'About MUKMIN',
-                'excerpt' => 'Mission, values, and how we serve communities.',
-                'body' => '<p>Edit this overview in <strong>Admin → CMS pages</strong>. Use the menu <em>About MUKMIN</em> for Who We Are and The Team.</p>',
+                'excerpt' => 'Hub for MUKMIN identity, team, and ecosystem entry points.',
+                'body' => '',
             ],
             [
                 'slug' => 'who-we-are',
                 'title' => 'Who We Are',
-                'excerpt' => 'Identity, purpose, and the story behind MUKMIN.',
-                'body' => '<p>Replace with your organisation narrative. Linked from <strong>About MUKMIN → Who We Are</strong>.</p>',
+                'excerpt' => 'National ecosystem narrative and mission.',
+                'body' => '',
             ],
             [
                 'slug' => 'the-team',
                 'title' => 'The Team',
-                'excerpt' => 'Leadership and people behind the work.',
-                'body' => '<p>Add bios and roles here. Linked from <strong>About MUKMIN → The Team</strong>.</p>',
+                'excerpt' => 'Leadership structure and how to connect.',
+                'body' => '',
             ],
             [
                 'slug' => 'our-ecosystem',
                 'title' => 'Our Ecosystem',
-                'excerpt' => 'Partners, programmes, and how the pieces connect.',
-                'body' => '<p>Describe networks, alliances, and operating context. Edit in the CMS.</p>',
+                'excerpt' => 'Shape, Connect, Deliver — FIKRAH, Gabungan MUKMIN, Yayasan MUKMIN.',
+                'body' => '',
             ],
             [
                 'slug' => 'impact-areas',
                 'title' => 'Impact Areas',
-                'excerpt' => 'Where we focus and how we measure change.',
-                'body' => '<p>Outline thematic impact pillars. Update copy and media in the CMS.</p>',
+                'excerpt' => 'Strategic initiatives 2026–2030 and five impact pillars.',
+                'body' => '',
             ],
             [
                 'slug' => 'featured-initiatives',
                 'title' => 'Featured Initiatives',
-                'excerpt' => 'Highlighted programmes and campaigns.',
-                'body' => '<p>Showcase flagship initiatives. Swap in cards, timelines, or stories as needed.</p>',
+                'excerpt' => 'MFLS, SIRAT, FIKRAH Blueprint, Digital Madrasah, and next steps.',
+                'body' => '',
             ],
             [
                 'slug' => 'cta-partners',
                 'title' => 'CTA / Partners',
-                'excerpt' => 'Partner with us and take the next step.',
-                'body' => '<p>Calls to action, partnership tiers, and contact paths. Maintain alongside your live partner pipeline.</p>',
+                'excerpt' => 'Partnerships, contact, registration, and giving.',
+                'body' => '',
             ],
         ];
 
@@ -72,11 +72,19 @@ class PortalSeeder extends Seeder
                     'title' => $row['title'],
                     'excerpt' => $row['excerpt'],
                     'body' => $row['body'],
-                    'widgets_only' => false,
+                    'widgets_only' => true,
                     'is_published' => true,
                     'published_at' => now(),
                 ]
             );
+        }
+
+        // CMS page copy lives in widgets (CmsLayoutWidgetsSeeder). Off by default so
+        // `php artisan db:seed` does not overwrite content you edited in Admin.
+        // Set SEED_CMS_LAYOUT_WIDGETS=true in .env to (re)apply template widgets, or run:
+        // php artisan db:seed --class=CmsLayoutWidgetsSeeder
+        if (filter_var(env('SEED_CMS_LAYOUT_WIDGETS', false), FILTER_VALIDATE_BOOLEAN)) {
+            $this->call(CmsLayoutWidgetsSeeder::class);
         }
 
         MenuItem::query()->whereNotNull('parent_id')->delete();
