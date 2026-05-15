@@ -63,17 +63,18 @@
     </div>
 
     @if (count($slidesWithMedia) > 0)
+        @php
+            $slideCount = count($slidesWithMedia);
+            $heroLoopSec = max(28, min(96, $slideCount * max(5, $slideInterval)));
+        @endphp
         <div
             id="mukmin-hero-carousel-{{ $widget->getKey() ?? 'new' }}"
-            class="mukmin-hero-carousel mukmin-hero__banners"
+            class="mukmin-hero-carousel mukmin-hero-carousel--continuous mukmin-hero__banners @unless($slideAutoplay) mukmin-hero-carousel--paused @endunless"
             role="region"
             aria-roledescription="{{ __('carousel') }}"
             aria-label="{{ __('Initiative banners') }}"
-            data-interval="{{ $slideInterval }}"
-            data-autoplay="{{ $slideAutoplay ? '1' : '0' }}"
-            data-slide-count="{{ count($slidesWithMedia) }}"
+            style="--hero-loop-sec: {{ $heroLoopSec }}s;"
         >
-            @php($slideCount = count($slidesWithMedia))
             <div class="mukmin-hero-carousel__viewport">
                 <div class="mukmin-hero-carousel__track">
                     @foreach (array_merge($slidesWithMedia, $slidesWithMedia) as $si => $slide)
@@ -128,22 +129,11 @@
             if (!root) return;
             var viewport = root.querySelector('.mukmin-hero-carousel__viewport');
             var track = root.querySelector('.mukmin-hero-carousel__track');
-            var slides = track ? track.querySelectorAll('.mukmin-hero-carousel__card') : [];
-            var realN = parseInt(root.getAttribute('data-slide-count'), 10) || 0;
-            if (!viewport || !track || slides.length < 2 || realN < 1) return;
+            if (!viewport || !track) return;
 
-            var intervalSec = parseInt(root.getAttribute('data-interval'), 10);
-            if (isNaN(intervalSec) || intervalSec < 3) intervalSec = 6;
-            var autoplay = root.getAttribute('data-autoplay') === '1';
-            var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            var idx = 0;
-            var timer = null;
-            var loopLock = false;
-            var peek = 3.25;
-            var visibleGaps = 3;
-
-            function updateResponsivePeek() {
+            function syncSlideWidth() {
                 var w = window.innerWidth || document.documentElement.clientWidth || 0;
+                var peek = 3.25;
                 if (w <= 420) {
                     peek = 1.08;
                 } else if (w <= 520) {
@@ -156,130 +146,25 @@
                     peek = 2.05;
                 } else if (w <= 1100) {
                     peek = 2.55;
-                } else {
-                    peek = 3.25;
                 }
-                visibleGaps = Math.max(0, Math.ceil(peek) - 1);
-            }
-
-            function gapPx() {
-                var st = window.getComputedStyle(track);
-                var n = parseFloat(st.columnGap || st.gap || '0', 10);
-                return isNaN(n) ? 0 : n;
-            }
-
-            function syncSlideMetrics() {
-                updateResponsivePeek();
+                var visibleGaps = Math.max(0, Math.ceil(peek) - 1);
                 var vw = viewport.clientWidth;
-                var g = gapPx();
-                var slideW = Math.max(0, (vw - visibleGaps * g) / peek);
+                var st = window.getComputedStyle(track);
+                var g = parseFloat(st.columnGap || st.gap || '0', 10);
+                if (isNaN(g)) g = 0;
+                var slideW = Math.max(200, (vw - visibleGaps * g) / peek);
                 viewport.style.setProperty('--hero-slide-w', slideW + 'px');
-                viewport.style.setProperty('--hero-gap', g + 'px');
-                return { slideW: slideW, g: g };
             }
 
-            function stepPx() {
-                var m = syncSlideMetrics();
-                return m.slideW + m.g;
+            syncSlideWidth();
+            if (typeof ResizeObserver !== 'undefined') {
+                new ResizeObserver(syncSlideWidth).observe(viewport);
             }
-
-            function setTransformPx(x, disableTransition) {
-                if (disableTransition) {
-                    track.classList.add('mukmin-hero-carousel__track--no-trans');
-                } else {
-                    track.classList.remove('mukmin-hero-carousel__track--no-trans');
-                }
-                track.style.transform = 'translate3d(' + (-x) + 'px,0,0)';
-            }
-
-            function applyTransform(disableTransition) {
-                setTransformPx(idx * stepPx(), disableTransition);
-            }
-
-            function jumpToStart() {
-                track.classList.add('mukmin-hero-carousel__track--no-trans');
-                idx = 0;
-                track.style.transform = 'translate3d(0,0,0)';
-                void track.offsetWidth;
-                track.classList.remove('mukmin-hero-carousel__track--no-trans');
-            }
-
-            function finishLoop() {
-                jumpToStart();
-                loopLock = false;
-            }
-
-            function advance() {
-                if (loopLock) return;
-                if (idx === realN - 1) {
-                    loopLock = true;
-                    idx += 1;
-                    applyTransform(false);
-                    var done = false;
-                    function cleanup() {
-                        if (done) return;
-                        done = true;
-                        track.removeEventListener('transitionend', onLoopEnd);
-                        clearTimeout(safetyTimer);
-                        finishLoop();
-                    }
-                    function onLoopEnd(e) {
-                        if (e.target !== track) return;
-                        if (e.propertyName && e.propertyName !== 'transform') return;
-                        cleanup();
-                    }
-                    var safetyTimer = setTimeout(cleanup, 900);
-                    track.addEventListener('transitionend', onLoopEnd);
-                } else {
-                    idx += 1;
-                    applyTransform(false);
-                }
-            }
-
-            function start() {
-                if (timer || !autoplay || reduceMotion) return;
-                timer = window.setInterval(advance, intervalSec * 1000);
-            }
-
-            function stop() {
-                if (timer) {
-                    window.clearInterval(timer);
-                    timer = null;
-                }
-            }
-
-            var ro = typeof ResizeObserver !== 'undefined'
-                ? new ResizeObserver(function () {
-                    syncSlideMetrics();
-                    applyTransform(true);
-                })
-                : null;
-            if (ro) ro.observe(viewport);
-
             var resizeT;
             window.addEventListener('resize', function () {
                 clearTimeout(resizeT);
-                resizeT = setTimeout(function () {
-                    syncSlideMetrics();
-                    applyTransform(true);
-                }, 50);
+                resizeT = setTimeout(syncSlideWidth, 50);
             });
-
-            root.addEventListener('mouseenter', stop);
-            root.addEventListener('mouseleave', start);
-            root.addEventListener('focusin', stop);
-            root.addEventListener('focusout', function (e) {
-                if (!root.contains(e.relatedTarget)) start();
-            });
-
-            syncSlideMetrics();
-            requestAnimationFrame(function () {
-                requestAnimationFrame(function () {
-                    syncSlideMetrics();
-                    applyTransform(true);
-                });
-            });
-            start();
         })();
         </script>
     @endif
