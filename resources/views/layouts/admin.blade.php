@@ -16,6 +16,12 @@
         <a href="{{ route('admin.menu-items.index') }}">{{ __('Menu items') }}</a>
         <a href="{{ route('admin.cms-pages.index') }}">{{ __('CMS pages') }}</a>
         <a href="{{ route('admin.widgets.index') }}">{{ __('Widgets') }}</a>
+        
+        <div class="nav-section">{{ __('Submissions') }}</div>
+        <a href="{{ route('admin.submissions.contact.index') }}">{{ __('Contact Us') }}</a>
+        <a href="{{ route('admin.submissions.registration.index') }}">{{ __('Registrations') }}</a>
+        <a href="{{ route('admin.submissions.scholarship.index') }}">{{ __('Scholarships') }}</a>
+        
         <div class="nav-section">{{ __('Site') }}</div>
         <a href="{{ route('home') }}" target="_blank" rel="noopener noreferrer">{{ __('View website') }}</a>
         <form action="{{ route('logout') }}" method="post" style="margin-top:1rem">
@@ -34,6 +40,11 @@
                     <a href="{{ route('admin.menu-items.index') }}">{{ __('Menu items') }}</a>
                     <a href="{{ route('admin.cms-pages.index') }}">{{ __('CMS pages') }}</a>
                     <a href="{{ route('admin.widgets.index') }}">{{ __('Widgets') }}</a>
+                    <hr>
+                    <a href="{{ route('admin.submissions.contact.index') }}">{{ __('Contact Submissions') }}</a>
+                    <a href="{{ route('admin.submissions.registration.index') }}">{{ __('Registrations') }}</a>
+                    <a href="{{ route('admin.submissions.scholarship.index') }}">{{ __('Scholarships') }}</a>
+                    <hr>
                     <a href="{{ route('home') }}" target="_blank" rel="noopener noreferrer">{{ __('View website') }}</a>
                 </div>
             </details>

@@ -45,7 +45,7 @@
     </div>
 
     <div class="mukmin-hero__cta" style="position: relative; z-index: 3; text-align: center; margin: clamp(1.5rem, 4vw, 2.5rem) auto 0; max-width: 40rem;">
-        <a href="#register" class="btn" style="
+        <a href="{{ \App\Support\FormUrls::register() }}" class="btn" style="
             display: inline-flex; align-items: center; gap: 0.5rem;
             background: linear-gradient(135deg, #10b981, #0d9488);
             color: #fff; font-weight: 700; font-size: 1.1rem;
@@ -79,7 +79,10 @@
                     @foreach (array_merge($slidesWithMedia, $slidesWithMedia) as $si => $slide)
                         @php($isClone = $si >= $slideCount)
                         @php($img = \App\Models\Widget::heroSlideImageUrl($slide))
-                        @php($href = trim((string) ($slide['link_url'] ?? '')))
+                        @php($href = \App\Support\FormUrls::resolveCtaUrl(
+                            trim((string) ($slide['cta_label'] ?? $slide['title'] ?? '')),
+                            (string) ($slide['link_url'] ?? '')
+                        ))
                         @php($title = trim((string) ($slide['title'] ?? '')) ?: __('Banner'))
                         @php($desc = trim((string) ($slide['description'] ?? '')))
                         @php($ctaCustom = trim((string) ($slide['cta_label'] ?? '')))

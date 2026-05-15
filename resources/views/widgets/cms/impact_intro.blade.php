@@ -76,7 +76,7 @@
                         continue;
                     }
                     $label = trim((string) ($cta['label'] ?? ''));
-                    $url = trim((string) ($cta['url'] ?? ''));
+                    $url = \App\Support\FormUrls::resolveCtaUrl($label, (string) ($cta['url'] ?? ''));
                     if ($label === '' || $url === '') {
                         continue;
                     }

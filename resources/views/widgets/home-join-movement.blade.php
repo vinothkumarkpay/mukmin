@@ -4,10 +4,16 @@
     $title = trim((string) ($s['join_title'] ?? $defs['join_title'] ?? ''));
     $subtitle = trim((string) ($s['join_subtitle'] ?? $defs['join_subtitle'] ?? ''));
     $pLabel = trim((string) ($s['join_primary_label'] ?? $defs['join_primary_label'] ?? ''));
-    $pUrl = trim((string) ($s['join_primary_url'] ?? $defs['join_primary_url'] ?? ''));
+    $pUrl = \App\Support\FormUrls::resolveCtaUrl(
+        trim((string) ($s['join_primary_label'] ?? $defs['join_primary_label'] ?? '')),
+        (string) ($s['join_primary_url'] ?? $defs['join_primary_url'] ?? '')
+    );
     $pNewTab = (bool) ($s['join_primary_new_tab'] ?? $defs['join_primary_new_tab'] ?? false);
     $secLabel = trim((string) ($s['join_secondary_label'] ?? $defs['join_secondary_label'] ?? ''));
-    $secUrl = trim((string) ($s['join_secondary_url'] ?? $defs['join_secondary_url'] ?? ''));
+    $secUrl = \App\Support\FormUrls::resolveCtaUrl(
+        trim((string) ($s['join_secondary_label'] ?? $defs['join_secondary_label'] ?? '')),
+        (string) ($s['join_secondary_url'] ?? $defs['join_secondary_url'] ?? '')
+    );
     $secNewTab = (bool) ($s['join_secondary_new_tab'] ?? $defs['join_secondary_new_tab'] ?? false);
     $showPrimary = $pLabel !== '' && $pUrl !== '';
     $showSecondary = $secLabel !== '' && $secUrl !== '';

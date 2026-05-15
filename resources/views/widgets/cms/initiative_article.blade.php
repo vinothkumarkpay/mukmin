@@ -4,7 +4,10 @@
     $headline = trim((string) data_get($s, 'headline', ''));
     $note = trim((string) data_get($s, 'note', ''));
     $ctaLabel = trim((string) data_get($s, 'cta_label', ''));
-    $ctaUrl = trim((string) data_get($s, 'cta_url', ''));
+    $ctaUrl = \App\Support\FormUrls::resolveCtaUrl(
+        trim((string) data_get($s, 'cta_label', '')),
+        (string) data_get($s, 'cta_url', '')
+    );
     $ctaNewTab = (bool) data_get($s, 'cta_new_tab', false);
 @endphp
 <section class="surface cms-page-widget cmsw-article">

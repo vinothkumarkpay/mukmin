@@ -3,7 +3,10 @@
     $headline = trim((string) data_get($s, 'headline', ''));
     $sub = trim((string) data_get($s, 'subheadline', ''));
     $ctaLabel = trim((string) data_get($s, 'cta_label', ''));
-    $ctaUrl = trim((string) data_get($s, 'cta_url', ''));
+    $ctaUrl = \App\Support\FormUrls::resolveCtaUrl(
+        trim((string) data_get($s, 'cta_label', '')),
+        (string) data_get($s, 'cta_url', '')
+    );
     $anchor = trim((string) data_get($s, 'anchor_id', ''));
 @endphp
 <section @if ($anchor !== '') id="{{ e($anchor) }}" @endif class="surface cms-page-widget cmsw-teaser">

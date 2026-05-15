@@ -15,7 +15,7 @@
                 continue;
             }
             $lab = \App\Models\Widget::decodeFooterText((string) ($link['label'] ?? ''));
-            $url = trim((string) ($link['url'] ?? ''));
+            $url = \App\Support\FormUrls::resolveCtaUrl($lab, (string) ($link['url'] ?? ''));
             if ($lab === '' || $url === '') {
                 continue;
             }

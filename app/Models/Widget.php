@@ -205,8 +205,8 @@ class Widget extends Model
             [
                 'title' => __('MUKMIN Future Leaders Scholarship'),
                 'description' => __('Supporting the next generation of leaders through education and mentorship.'),
-                'cta_label' => __('Scholarship details'),
-                'link_url' => '/page/about-mukmin',
+                'cta_label' => __('Apply Now'),
+                'link_url' => '/apply-scholarship',
                 'image_url' => 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=675&fit=crop&q=80',
                 'image_path' => null,
                 'new_tab' => false,
@@ -327,10 +327,10 @@ class Widget extends Model
             'join_title' => __('Join the Movement'),
             'join_subtitle' => __('Be part of a national effort to connect communities, unlock opportunities, and build a more inclusive future.'),
             'join_primary_label' => __('Register as a member'),
-            'join_primary_url' => '/page/about-mukmin',
+            'join_primary_url' => '/register',
             'join_primary_new_tab' => false,
             'join_secondary_label' => __('Donate for a better future'),
-            'join_secondary_url' => '/page/about-mukmin',
+            'join_secondary_url' => '/page/cta-partners#donate',
             'join_secondary_new_tab' => false,
         ];
     }
@@ -379,7 +379,7 @@ class Widget extends Model
                 [
                     'title' => __('Partnership'),
                     'links' => [
-                        ['label' => __('Partner With Us'), 'url' => '#', 'new_tab' => false],
+                        ['label' => __('Partner With Us'), 'url' => '/page/cta-partners', 'new_tab' => false],
                         ['label' => __('Research & Policy'), 'url' => '#', 'new_tab' => false],
                         ['label' => __('Institutions'), 'url' => '#', 'new_tab' => false],
                     ],
@@ -387,7 +387,7 @@ class Widget extends Model
                 [
                     'title' => __('Community'),
                     'links' => [
-                        ['label' => __('Join MUKMIN'), 'url' => '#', 'new_tab' => false],
+                        ['label' => __('Join MUKMIN'), 'url' => '/register', 'new_tab' => false],
                         ['label' => __('2030 Blueprint'), 'url' => '#', 'new_tab' => false],
                         ['label' => __('Share Your Story'), 'url' => '#', 'new_tab' => false],
                     ],
