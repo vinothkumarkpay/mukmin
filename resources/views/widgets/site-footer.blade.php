@@ -2,33 +2,6 @@
     $s = $widget->settings ?? [];
     $defs = \App\Models\Widget::defaultSiteFooterSettings();
     $suffix = \App\Models\Widget::decodeFooterText((string) ($s['footer_copyright_suffix'] ?? $defs['footer_copyright_suffix'] ?? ''));
-    $colsIn = $s['footer_columns'] ?? $defs['footer_columns'] ?? [];
-    $columns = [];
-    foreach ($colsIn as $col) {
-        if (! is_array($col)) {
-            continue;
-        }
-        $title = \App\Models\Widget::decodeFooterText((string) ($col['title'] ?? ''));
-        $links = [];
-        foreach (($col['links'] ?? []) as $link) {
-            if (! is_array($link)) {
-                continue;
-            }
-            $lab = \App\Models\Widget::decodeFooterText((string) ($link['label'] ?? ''));
-            $url = \App\Support\FormUrls::resolveCtaUrl($lab, (string) ($link['url'] ?? ''));
-            if ($lab === '' || $url === '') {
-                continue;
-            }
-            $links[] = [
-                'label' => $lab,
-                'url' => $url,
-                'new_tab' => ! empty($link['new_tab']),
-            ];
-        }
-        if ($title !== '' || count($links) > 0) {
-            $columns[] = ['title' => $title, 'links' => $links];
-        }
-    }
     $socialIn = $s['footer_social'] ?? $defs['footer_social'] ?? [];
     $socials = [];
     $allowedIcons = \App\Models\Widget::siteFooterSocialIconKeys();
@@ -66,32 +39,9 @@
     }
     $otherFooterWidgets = $otherFooterWidgets ?? collect();
 @endphp
-<div class="site-footer__nav">
-    <div class="site-footer__nav-inner">
-        @if (count($columns) > 0)
-            <nav class="site-footer__columns" aria-label="{{ __('Footer links') }}">
-                @foreach ($columns as $col)
-                    <div class="site-footer__col">
-                        @if ($col['title'] !== '')
-                            <h2 class="site-footer__heading">{{ $col['title'] }}</h2>
-                        @endif
-                        @if (count($col['links']) > 0)
-                            <ul class="site-footer__list">
-                                @foreach ($col['links'] as $link)
-                                    <li>
-                                        <a
-                                            href="{{ $link['url'] }}"
-                                            @if (! empty($link['new_tab'])) target="_blank" rel="noopener noreferrer" @endif
-                                        >{{ $link['label'] }}</a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </div>
-                @endforeach
-            </nav>
-        @endif
-        @if ($otherFooterWidgets->isNotEmpty())
+@if ($otherFooterWidgets->isNotEmpty())
+    <div class="site-footer__nav">
+        <div class="site-footer__nav-inner">
             <div class="site-footer__widgets">
                 @foreach ($otherFooterWidgets as $fw)
                     <div class="site-footer__widget-block">
@@ -102,9 +52,9 @@
                     </div>
                 @endforeach
             </div>
-        @endif
+        </div>
     </div>
-</div>
+@endif
 <div class="site-footer__bar">
     <div class="site-footer__bar-inner">
         <p class="site-footer__copy">
