@@ -27,9 +27,13 @@
     $allSlides = [];
     $htmlContent = $widget->content;
     $headlineHtml = '';
+    $subHeaderHtml = '';
     $subHtml = '';
     if (preg_match('/(<h1[^>]*>.*?<\/h1>)/is', $htmlContent, $matches)) {
         $headlineHtml = $matches[1];
+    }
+    if (preg_match('/(<p[^>]*class="[^"]*mukmin-hero__sub-headline[^"]*"[^>]*>.*?<\/p>)/is', $htmlContent, $matches)) {
+        $subHeaderHtml = $matches[1];
     }
     if (preg_match('/(<div class="mukmin-hero__sub"[^>]*>.*?<\/div>)/is', $htmlContent, $matches)) {
         $subHtml = $matches[1];
@@ -38,6 +42,7 @@
     $allSlides[] = [
         'is_html_content' => true,
         'html_headline' => $headlineHtml ?: $htmlContent,
+        'html_sub_header' => $subHeaderHtml,
         'html_sub' => $subHtml,
         'image_url' => $bgUrl ?: \App\Models\Widget::heroSidePanelDefaultImageUrl(),
         'cta_label' => __('Register Now'),
@@ -55,6 +60,7 @@
         $allSlides[] = [
             'is_html_content' => false,
             'title' => trim((string) ($slide['title'] ?? '')) ?: __('Banner'),
+            'subtitle' => trim((string) ($slide['subtitle'] ?? '')),
             'description' => trim((string) ($slide['description'] ?? '')),
             'image_url' => $img,
             'cta_label' => trim((string) ($slide['cta_label'] ?? '')) ?: __('More details'),
@@ -102,8 +108,21 @@
                     </div>
                     <div class="mukmin-hero__layout-right">
                         @if ($slide['is_html_content'])
+                            @if (!empty($slide['html_sub_header']))
+                                {!! $slide['html_sub_header'] !!}
+                            @endif
                             {!! $slide['html_sub'] !!}
                         @else
+                            @if (!empty($slide['subtitle']))
+                                @php
+                                    $subtitleLines = array_values(array_filter(array_map('trim', preg_split('/\.(?:\s+|$)/u', (string) $slide['subtitle']))));
+                                @endphp
+                                <p class="mukmin-hero__sub-headline">
+                                    @foreach ($subtitleLines as $line)
+                                        <span class="mukmin-hero__sub-headline-line">{{ $line }}.</span>
+                                    @endforeach
+                                </p>
+                            @endif
                             @if ($slide['description'])
                                 <div class="mukmin-hero__sub">
                                     <p class="mukmin-hero__subline">{{ $slide['description'] }}</p>

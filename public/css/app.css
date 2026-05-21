@@ -1926,7 +1926,7 @@ details.admin-nav-drawer[open] summary {
 
 .mukmin-hero__sub {
     max-width: 42rem;
-    margin: 0 auto;
+    margin: 0;
     font-family: var(--font-hero-sans);
     font-size: clamp(1.02rem, 2.25vw, 1.22rem);
     font-weight: 500;
@@ -1944,6 +1944,35 @@ details.admin-nav-drawer[open] summary {
 
 .mukmin-hero__subline + .mukmin-hero__subline {
     margin-top: 1rem;
+}
+
+/* Hero slide tagline (sub-header) — sits above the body paragraph on initiative slides */
+.mukmin-hero__sub-headline {
+    margin: 0 0 0.85rem;
+    max-width: 42rem;
+    font-family: var(--font-hero-display, var(--font-hero-sans));
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+    color: #b45309;
+    background: linear-gradient(95deg, #ea580c 0%, #f59e0b 45%, #0d9488 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+/* Each sentence in the sub-header sits on its own line for added emphasis */
+.mukmin-hero__sub-headline-line {
+    display: block;
+}
+.mukmin-hero__sub-headline-line + .mukmin-hero__sub-headline-line {
+    margin-top: 0.2rem;
+}
+
+.mukmin-hero__content-slide.active .mukmin-hero__sub-headline {
+    animation: slideTextUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
 }
 
 /* Hero Slide Navigation & Indicators */
@@ -2049,8 +2078,8 @@ details.admin-nav-drawer[open] summary {
 .mukmin-hero__layout-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    text-align: center;
+    gap: 1.25rem;
+    text-align: left;
     width: 100%;
 }
 
@@ -2058,8 +2087,8 @@ details.admin-nav-drawer[open] summary {
 .mukmin-hero__layout-right {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     width: 100%;
 }
 
@@ -2067,16 +2096,9 @@ details.admin-nav-drawer[open] summary {
     .mukmin-hero__layout-grid {
         grid-template-columns: 1.15fr 0.85fr;
         gap: 3.5rem;
-        text-align: left;
         align-items: flex-start;
-    }
-    .mukmin-hero__layout-left {
-        align-items: flex-start;
-        text-align: left;
     }
     .mukmin-hero__layout-right {
-        align-items: flex-start;
-        text-align: left;
         margin-top: 1.5rem;
     }
     .mukmin-hero__headline {
@@ -2110,6 +2132,10 @@ details.admin-nav-drawer[open] summary {
 .mukmin-hero__content-slide.active .mukmin-hero__sub {
     animation: slideTextUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
 }
+.mukmin-hero__cta {
+    margin-top: 1.75rem;
+}
+
 .mukmin-hero__content-slide.active .mukmin-hero__cta {
     animation: slideTextUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
 }
@@ -2147,17 +2173,12 @@ details.admin-nav-drawer[open] summary {
     background: linear-gradient(135deg, #d97706, #f97316);
 }
 .hero-slider-cta-subtext {
-    margin: 0.85rem auto 0;
+    margin: 0.85rem 0 0;
     font-size: 0.92rem;
     color: rgba(255, 255, 255, 0.75);
     max-width: 34rem;
     line-height: 1.55;
     font-weight: 400;
-}
-@media (min-width: 768px) {
-    .hero-slider-cta-subtext {
-        margin: 0.85rem 0 0;
-    }
 }
 
 /* Slide photo: each new active slide visibly slides in. Direction-aware (next vs prev). */
@@ -2214,10 +2235,6 @@ details.admin-nav-drawer[open] summary {
     }
 
     .mukmin-hero__inner {
-        margin: 0;
-    }
-
-    .mukmin-hero__sub {
         margin: 0;
     }
 }

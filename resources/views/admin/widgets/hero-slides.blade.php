@@ -30,6 +30,11 @@
                 @error("hero_slides.$i.title")<span class="error">{{ $message }}</span>@enderror
             </label>
             <label class="field">
+                <span>{{ __('Sub-header / tagline (shown above the description)') }}</span>
+                <input type="text" name="hero_slides[{{ $i }}][subtitle]" value="{{ old("hero_slides.$i.subtitle", $slide['subtitle'] ?? $def['subtitle'] ?? '') }}" maxlength="255" placeholder="{{ __('Short tagline (optional)') }}">
+                @error("hero_slides.$i.subtitle")<span class="error">{{ $message }}</span>@enderror
+            </label>
+            <label class="field">
                 <span>{{ __('Short description (shown on hover / touch)') }}</span>
                 <textarea name="hero_slides[{{ $i }}][description]" rows="3" maxlength="2000" class="code" style="min-height:4.5rem">{{ old("hero_slides.$i.description", $slide['description'] ?? $def['description'] ?? '') }}</textarea>
                 @error("hero_slides.$i.description")<span class="error">{{ $message }}</span>@enderror

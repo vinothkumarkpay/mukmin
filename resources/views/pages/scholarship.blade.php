@@ -208,19 +208,113 @@
         display: flex;
         gap: 1rem;
     }
+
+    /* Scholarship hero with photo + bright standalone heading */
+    .scholarship-hero {
+        position: relative;
+        border-radius: 24px;
+        overflow: hidden;
+        padding: clamp(3.25rem, 7vw, 5.25rem) clamp(1.25rem, 5vw, 3rem);
+        margin: 0 0 3rem;
+        text-align: center;
+        background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+        isolation: isolate;
+    }
+    .scholarship-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at 20% 30%, rgba(245, 158, 11, 0.55) 0%, rgba(245, 158, 11, 0) 55%),
+            radial-gradient(ellipse at 80% 80%, rgba(13, 148, 136, 0.55) 0%, rgba(13, 148, 136, 0) 55%),
+            linear-gradient(135deg, rgba(15, 23, 42, 0.55) 0%, rgba(15, 23, 42, 0.35) 50%, rgba(15, 23, 42, 0.55) 100%);
+        z-index: 1;
+    }
+    .scholarship-hero__content {
+        position: relative;
+        z-index: 2;
+        max-width: 920px;
+        margin: 0 auto;
+    }
+    .scholarship-hero__eyebrow {
+        display: inline-block;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #b45309;
+        background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+        padding: 0.5rem 1.15rem;
+        border-radius: 999px;
+        margin-bottom: 1.2rem;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    }
+    .scholarship-hero__title {
+        font-family: var(--font-hero-display, var(--font));
+        font-size: clamp(2.25rem, 5vw, 3.6rem);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        margin: 0 0 1rem;
+        background: linear-gradient(95deg, #fde68a 0%, #fbbf24 35%, #fb923c 65%, #5eead4 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: #fbbf24; /* fallback */
+        text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+        filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.35));
+    }
+    .scholarship-hero__subtitle {
+        display: inline-block;
+        font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #ffffff;
+        margin: 0 0 1.25rem;
+        padding: 0.35rem 1.25rem;
+        background: linear-gradient(90deg, rgba(234, 88, 12, 0.85) 0%, rgba(13, 148, 136, 0.85) 100%);
+        border-radius: 999px;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+    }
+    .scholarship-hero__divider {
+        width: 140px;
+        height: 4px;
+        margin: 0 auto;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #facc15 0%, #fb923c 55%, #5eead4 100%);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 575px) {
+        .scholarship-hero {
+            border-radius: 18px;
+            margin-bottom: 2rem;
+        }
+        .scholarship-hero__eyebrow {
+            font-size: 0.7rem;
+            padding: 0.4rem 0.95rem;
+        }
+        .scholarship-hero__subtitle {
+            padding: 0.3rem 1rem;
+        }
+    }
 </style>
 
-<main class="page-content" style="padding-top: 100px; padding-bottom: 80px; background-color: #fcfcfc;">
+<main class="page-content" style="padding-top: 0; padding-bottom: 80px; background-color: #fcfcfc;">
     <div class="container">
-        <div class="cmsw-lead mb-5 mt-4 position-relative" style="border-radius: 20px; padding: 6rem 3rem; text-align: center; box-shadow: 0 20px 40px rgba(15, 61, 44, 0.15); overflow: hidden; background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center;">
-            <div class="position-absolute w-100 h-100 top-0 start-0" style="background: linear-gradient(135deg, rgba(15, 61, 44, 0.85) 0%, rgba(26, 107, 74, 0.75) 100%);"></div>
-            <div class="position-relative" style="z-index: 1;">
-                <h1 style="color: white; font-family: var(--font-hero-display, var(--font)); font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 1rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">MUKMIN Future Leaders Scholarship</h1>
-                <p style="color: rgba(255,255,255,0.95); font-size: 1.25rem; max-width: 700px; margin: 0 auto; line-height: 1.6; font-weight: 600; text-shadow: 0 1px 5px rgba(0,0,0,0.2);">
-                    Application Form
-                </p>
+        <header class="scholarship-hero" style="margin-top: 1.25rem;">
+            <div class="scholarship-hero__content">
+                <span class="scholarship-hero__eyebrow">Scholarship Programme</span>
+                <h1 class="scholarship-hero__title">MUKMIN Future Leaders Scholarship</h1>
+                <p class="scholarship-hero__subtitle">Application Form</p>
+                <div class="scholarship-hero__divider" aria-hidden="true"></div>
             </div>
-        </div>
+        </header>
 
         <div class="row justify-content-center">
             <div class="col-lg-10">

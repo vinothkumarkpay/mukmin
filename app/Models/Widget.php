@@ -190,7 +190,8 @@ class Widget extends Model
         return [
             [
                 'title' => __('SIRAT Series'),
-                'description' => __('Talks, stories, and learning journeys that inspire purposeful action.'),
+                'subtitle' => __('Developing Leaders. Connecting Communities. Driving Impact.'),
+                'description' => __('From youth development to global leadership engagement, the SIRAT Series nurtures future-ready leaders equipped with values, vision and purpose. Through meaningful dialogue, strategic collaboration and community-driven initiatives, we cultivate a generation committed to unity, progress and shared prosperity.'),
                 'cta_label' => __('View SIRAT Series'),
                 'link_url' => '/page/about-mukmin',
                 'image_url' => 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1920&q=80',
@@ -199,7 +200,8 @@ class Widget extends Model
             ],
             [
                 'title' => __('MUKMIN Future Leaders Scholarship'),
-                'description' => __('Supporting the next generation of leaders through education and mentorship.'),
+                'subtitle' => __('Unlock Your Future. Lead with Purpose.'),
+                'description' => __('The MUKMIN Future Leaders Scholarship empowers promising individuals through education, mentorship and leadership development opportunities. Beyond financial support, we invest in character, innovation and community impact — shaping future leaders who will contribute meaningfully to society and nation-building.'),
                 'cta_label' => __('Apply Now'),
                 'link_url' => '/apply-scholarship',
                 'image_url' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80',
@@ -208,7 +210,8 @@ class Widget extends Model
             ],
             [
                 'title' => __('Kembara Ramadhan MUKMIN'),
-                'description' => __('Seasonal outreach and gatherings that bring people together in Ramadhan.'),
+                'subtitle' => __('Compassion in Action. Unity in Giving.'),
+                'description' => __('Kembara Ramadhan MUKMIN brings communities together through meaningful outreach, humanitarian support and acts of service during the blessed month of Ramadan. From food aid initiatives to community engagement programmes, we strengthen the spirit of compassion, dignity and collective responsibility across society.'),
                 'cta_label' => __('Learn more'),
                 'link_url' => '/page/about-mukmin',
                 'image_url' => 'https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=1920&q=80',

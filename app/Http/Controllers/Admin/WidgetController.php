@@ -189,6 +189,7 @@ class WidgetController extends Controller
             }
             $rules['hero_slides'] = ['nullable', 'array'];
             $rules['hero_slides.*.title'] = ['nullable', 'string', 'max:255'];
+            $rules['hero_slides.*.subtitle'] = ['nullable', 'string', 'max:255'];
             $rules['hero_slides.*.description'] = ['nullable', 'string', 'max:2000'];
             $rules['hero_slides.*.cta_label'] = ['nullable', 'string', 'max:120'];
             $rules['hero_slides.*.link_url'] = ['nullable', 'string', 'max:2048'];
@@ -656,6 +657,7 @@ class WidgetController extends Controller
             $descRaw = (string) ($row['description'] ?? $prev['description'] ?? ($defaults[$i]['description'] ?? ''));
             $slides[] = [
                 'title' => trim((string) ($row['title'] ?? $prev['title'] ?? $defaults[$i]['title'] ?? '')),
+                'subtitle' => trim(strip_tags((string) ($row['subtitle'] ?? $prev['subtitle'] ?? $defaults[$i]['subtitle'] ?? ''))),
                 'description' => trim(strip_tags($descRaw)),
                 'cta_label' => trim((string) ($row['cta_label'] ?? $prev['cta_label'] ?? $defaults[$i]['cta_label'] ?? '')),
                 'link_url' => trim((string) ($row['link_url'] ?? $prev['link_url'] ?? $defaults[$i]['link_url'] ?? '')),

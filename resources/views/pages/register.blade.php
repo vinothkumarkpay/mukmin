@@ -7,26 +7,111 @@
     $focusAreas = ['Education / Training', 'Welfare / Charity', 'Human Rights', 'Youth Development', 'Women Empowerment', 'Community Services', 'Others'];
 @endphp
 <style>
-    .reg-page { padding: 1.5rem 0 3rem; }
+    .reg-page { padding: 1.25rem 0 3rem; }
+
+    /* Membership hero — photo backdrop + bright standalone heading (matches scholarship apply page) */
     .reg-hero {
+        position: relative;
+        border-radius: 24px;
+        overflow: hidden;
+        padding: clamp(3rem, 6.5vw, 4.75rem) clamp(1.25rem, 5vw, 3rem);
+        margin: 0 0 2.5rem;
         text-align: center;
-        padding: clamp(2rem, 5vw, 3rem) clamp(1.25rem, 4vw, 2.5rem);
-        margin-bottom: 2rem;
-        border-radius: 16px;
-        background: linear-gradient(135deg, #0f3d2c 0%, #1a6b4a 100%);
-        box-shadow: 0 12px 32px rgba(15, 61, 44, 0.18);
+        background-image: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+        isolation: isolate;
+    }
+    .reg-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse at 20% 30%, rgba(245, 158, 11, 0.55) 0%, rgba(245, 158, 11, 0) 55%),
+            radial-gradient(ellipse at 80% 80%, rgba(13, 148, 136, 0.55) 0%, rgba(13, 148, 136, 0) 55%),
+            linear-gradient(135deg, rgba(15, 23, 42, 0.55) 0%, rgba(15, 23, 42, 0.35) 50%, rgba(15, 23, 42, 0.55) 100%);
+        z-index: 1;
+    }
+    .reg-hero__content {
+        position: relative;
+        z-index: 2;
+        max-width: 920px;
+        margin: 0 auto;
+    }
+    .reg-hero__eyebrow {
+        display: inline-block;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #b45309;
+        background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+        padding: 0.5rem 1.15rem;
+        border-radius: 999px;
+        margin-bottom: 1.2rem;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
     }
     .reg-hero h1 {
         font-family: 'Fraunces', serif;
-        color: #fff;
+        font-size: clamp(2.15rem, 4.8vw, 3.4rem);
         font-weight: 800;
-        font-size: clamp(1.65rem, 4vw, 2.25rem);
-        margin: 0 0 0.75rem;
-        line-height: 1.2;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        margin: 0 0 1rem;
+        background: linear-gradient(95deg, #fde68a 0%, #fbbf24 35%, #fb923c 65%, #5eead4 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: #fbbf24;
+        text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+        filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.35));
+        text-transform: none;
     }
-    .reg-hero p { color: rgba(255,255,255,0.9); margin: 0; font-size: 1.05rem; line-height: 1.6; max-width: 40rem; margin-inline: auto; }
+    .reg-hero__subtitle {
+        display: inline-block;
+        font-size: clamp(1.3rem, 2.6vw, 1.85rem);
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #ffffff;
+        margin: 0 0 1.25rem;
+        padding: 0.35rem 1.25rem;
+        background: linear-gradient(90deg, rgba(234, 88, 12, 0.85) 0%, rgba(13, 148, 136, 0.85) 100%);
+        border-radius: 999px;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+    }
+    .reg-hero__divider {
+        width: 140px;
+        height: 4px;
+        margin: 0 auto 1rem;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #facc15 0%, #fb923c 55%, #5eead4 100%);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+    .reg-hero p {
+        color: rgba(255, 255, 255, 0.95);
+        margin: 0 auto;
+        font-size: clamp(0.98rem, 1.6vw, 1.1rem);
+        line-height: 1.6;
+        max-width: 40rem;
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    }
+
+    @media (max-width: 575px) {
+        .reg-hero {
+            border-radius: 18px;
+            margin-bottom: 2rem;
+        }
+        .reg-hero__eyebrow {
+            font-size: 0.7rem;
+            padding: 0.4rem 0.95rem;
+        }
+        .reg-hero__subtitle {
+            padding: 0.3rem 1rem;
+        }
+    }
     .reg-form-card {
         background: #fff;
         border-radius: 16px;
@@ -139,8 +224,13 @@
 
 <div class="reg-page">
     <header class="reg-hero">
-        <h1>Mukmin Organisation Membership Registration Form</h1>
-        <p>Complete all sections below. Fields marked with * are required.</p>
+        <div class="reg-hero__content">
+            <span class="reg-hero__eyebrow">Membership</span>
+            <h1>MUKMIN Organisation Membership</h1>
+            <p class="reg-hero__subtitle">Registration Form</p>
+            <div class="reg-hero__divider" aria-hidden="true"></div>
+            <p>Complete all sections below. Fields marked with * are required.</p>
+        </div>
     </header>
 
     <div class="reg-form-card">
