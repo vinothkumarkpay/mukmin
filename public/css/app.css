@@ -2160,32 +2160,35 @@ details.admin-nav-drawer[open] summary {
     }
 }
 
-/* Slide photo: only the .active slide is visible. Keep natural colours, just soften slightly. */
+/* Slide photo: each new active slide visibly slides in from the right while crossfading. */
 .mukmin-hero__photo {
     position: absolute;
     inset: 0;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    transform: scale(1.04);
+    transform: translateX(-40px) scale(1.10);
     opacity: 0;
     visibility: hidden;
-    filter: saturate(0.95) brightness(1.0) blur(0.5px);
-    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.7s;
+    filter: saturate(0.95) brightness(1.0);
+    transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0s linear 1.1s;
     z-index: 0;
 }
 
 .mukmin-hero__photo.active {
-    opacity: 0.88;
+    opacity: 0.85;
     visibility: visible;
     z-index: 1;
-    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0s;
-    animation: heroZoomEffect 20s ease-out forwards;
+    transition: opacity 1.1s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0s linear 0s;
+    animation: heroSlideMotion 6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-@keyframes heroZoomEffect {
-    from { transform: scale(1.04); }
-    to { transform: scale(1.09); }
+@keyframes heroSlideMotion {
+    0%   { transform: translateX(100px) scale(1.05); }
+    35%  { transform: translateX(0) scale(1.06); }
+    100% { transform: translateX(-40px) scale(1.10); }
 }
 
 @media (min-width: 768px) {
