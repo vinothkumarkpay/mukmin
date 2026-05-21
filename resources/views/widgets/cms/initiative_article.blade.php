@@ -9,8 +9,9 @@
         (string) data_get($s, 'cta_url', '')
     );
     $ctaNewTab = (bool) data_get($s, 'cta_new_tab', false);
+    $anchor = trim((string) data_get($s, 'anchor_id', $widget->slug));
 @endphp
-<section class="surface cms-page-widget cmsw-article">
+<section id="{{ $anchor }}" class="surface cms-page-widget cmsw-article" style="scroll-margin-top: 120px;">
     @if ($eyebrow !== '')
         <p class="cmsw-eyebrow">{{ $eyebrow }}</p>
     @endif
