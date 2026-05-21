@@ -114,7 +114,7 @@
     }
 
     .contact-detail a {
-        color: #10b981;
+        color: #d97706;
         text-decoration: none;
         transition: color 0.2s ease;
     }
@@ -207,8 +207,8 @@
     .contact-form-input:focus,
     .contact-form-textarea:focus {
         background-color: #ffffff;
-        border-color: #10b981;
-        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+        border-color: #d97706;
+        box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.12);
         outline: none;
     }
 

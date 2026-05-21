@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 xhr.send(formData);
             });
         },
-        content_style: 'body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 15px; color: #1a2e24; line-height: 1.6; padding: 0.5rem; } img { max-width: 100%; height: auto; border-radius: 8px; } a { color: #1f6b4a; }',
+        content_style: 'body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 15px; color: #1c1917; line-height: 1.6; padding: 0.5rem; } img { max-width: 100%; height: auto; border-radius: 8px; } a { color: #d97706; }',
         convert_urls: false,
         relative_urls: false,
         setup: function (editor) {

@@ -12,7 +12,7 @@ class SiteBranding
      */
     public static function defaultExternalLogoUrl(): string
     {
-        return 'https://fikrah.org/v3/assets/img/logo/mukmin_logo.png';
+        return '/images/mukmin_logo.png';
     }
 
     /**

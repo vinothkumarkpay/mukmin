@@ -23,22 +23,26 @@ class Widget extends Model
     public const SITE_FOOTER_SLUG = 'site-footer';
 
     /** Number of initiative banner slots configurable in admin. */
-    public const HERO_SLIDE_SLOTS = 4;
+    public const HERO_SLIDE_SLOTS = 3;
 
     /**
-     * Curated hero side-panel stock: green / outdoor feel with people in frame.
-     * None of these IDs appear in {@see defaultHeroSlides}. Picked by {@see heroSidePanelDefaultImageUrl()}.
+     * Curated hero background stock: clean, professional sceneries (soft mountain / lake / forest)
+     * chosen to sit quietly behind the headline without competing with the hero text.
+     * Picked by {@see heroSidePanelDefaultImageUrl()} on a daily rotation.
      *
      * @return array<int, string>
      */
     public static function heroSidePanelDefaultImageCandidates(): array
     {
         return [
-            'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1800&h=1200&q=82',
-            'https://images.unsplash.com/photo-1593113598338-cbff28882e07?auto=format&fit=crop&w=1800&h=1200&q=82',
-            'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1800&h=1200&q=82',
-            'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=1800&h=1200&q=82',
-            'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=1800&h=1200&q=82',
+            // Calm beach at golden hour — hope, journey (donation impact)
+            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&h=1200&q=82',
+            // Mt Hood lake reflection — pristine green/alpine (reflection, growth)
+            'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1800&h=1200&q=82',
+            // Soft green meadow with sunlight — abundance, what generosity enables
+            'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1800&h=1200&q=82',
+            // Open ocean horizon — opportunity, openness, hope
+            'https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=1800&h=1200&q=82',
         ];
     }
 
@@ -60,7 +64,7 @@ class Widget extends Model
     /**
      * @deprecated Use {@see heroSidePanelDefaultImageUrl()}. Kept so older migrations that reference this constant keep resolving.
      */
-    public const HERO_SIDE_PANEL_DEFAULT_IMAGE_URL = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1800&h=1200&q=82';
+    public const HERO_SIDE_PANEL_DEFAULT_IMAGE_URL = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80';
 
     /** Stat cards in the impact outcomes widget. */
     public const IMPACT_STAT_CARD_SLOTS = 3;
@@ -185,20 +189,11 @@ class Widget extends Model
     {
         return [
             [
-                'title' => __('Moving banners on initiatives'),
-                'description' => __('Highlights from our community programmes and how you can take part.'),
-                'cta_label' => __('Explore initiatives'),
-                'link_url' => '/',
-                'image_url' => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&h=675&fit=crop&q=80',
-                'image_path' => null,
-                'new_tab' => false,
-            ],
-            [
                 'title' => __('SIRAT Series'),
                 'description' => __('Talks, stories, and learning journeys that inspire purposeful action.'),
                 'cta_label' => __('View SIRAT Series'),
                 'link_url' => '/page/about-mukmin',
-                'image_url' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=675&fit=crop&q=80',
+                'image_url' => 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1920&q=80',
                 'image_path' => null,
                 'new_tab' => false,
             ],
@@ -207,7 +202,7 @@ class Widget extends Model
                 'description' => __('Supporting the next generation of leaders through education and mentorship.'),
                 'cta_label' => __('Apply Now'),
                 'link_url' => '/apply-scholarship',
-                'image_url' => 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1200&h=675&fit=crop&q=80',
+                'image_url' => 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80',
                 'image_path' => null,
                 'new_tab' => false,
             ],
@@ -216,7 +211,7 @@ class Widget extends Model
                 'description' => __('Seasonal outreach and gatherings that bring people together in Ramadhan.'),
                 'cta_label' => __('Learn more'),
                 'link_url' => '/page/about-mukmin',
-                'image_url' => 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1200&h=675&fit=crop&q=80',
+                'image_url' => 'https://images.unsplash.com/photo-1473773508845-188df298d2d1?auto=format&fit=crop&w=1920&q=80',
                 'image_path' => null,
                 'new_tab' => false,
             ],
@@ -277,39 +272,39 @@ class Widget extends Model
     public static function defaultVoicesSettings(): array
     {
         return [
-            'voices_eyebrow' => __('VOICES OF CHANGE'),
-            'voices_title' => __('What participants are saying'),
+            'voices_eyebrow' => '',
+            'voices_title' => __('Voices of Mukmin'),
             'voices_marquee_seconds' => 0,
             'voices_marquee_autoplay' => true,
             'voices_items' => [
                 [
                     'name' => 'Nur Aisyah',
                     'role' => __('Global Program – Youth Delegate'),
-                    'quote' => __('Meeting people from different countries changed how I think. I\'m more open, and more driven.'),
+                    'quote' => 'https://www.youtube.com/watch?v=9No-FiE9yyo',
                     'initial' => 'N',
                 ],
                 [
                     'name' => 'Marcus Lee',
                     'role' => __('Community Fellow'),
-                    'quote' => __('The sessions gave me clarity on how I want to contribute back home.'),
+                    'quote' => 'https://www.youtube.com/watch?v=k1w5Z7d5a5s',
                     'initial' => 'M',
                 ],
                 [
                     'name' => 'Aisha Rahman',
                     'role' => __('Scholarship alumna'),
-                    'quote' => __('I felt supported every step of the way — the network I gained is priceless.'),
+                    'quote' => 'https://www.youtube.com/watch?v=Y8Z65v_bX2g',
                     'initial' => 'A',
                 ],
                 [
                     'name' => 'Daniel Kumar',
                     'role' => __('Volunteer lead'),
-                    'quote' => __('We saw real impact in neighbourhoods that needed it most.'),
+                    'quote' => 'https://www.youtube.com/watch?v=x7Mh-gL6kik',
                     'initial' => 'D',
                 ],
                 [
                     'name' => 'Siti Hajar',
                     'role' => __('Programme partner'),
-                    'quote' => __('Collaboration with Mukmin amplified what we could do together.'),
+                    'quote' => 'https://www.youtube.com/watch?v=tgbNymZ7vqY',
                     'initial' => 'S',
                 ],
             ],
@@ -342,7 +337,7 @@ class Widget extends Model
      */
     public static function siteFooterSocialIconKeys(): array
     {
-        return ['facebook', 'instagram', 'x', 'pinterest', 'linkedin', 'youtube', 'link'];
+        return ['facebook', 'instagram', 'x', 'linkedin', 'youtube', 'link'];
     }
 
     /**
@@ -413,7 +408,7 @@ class Widget extends Model
                 ['icon' => 'facebook', 'url' => '#', 'label' => 'Facebook', 'new_tab' => false],
                 ['icon' => 'instagram', 'url' => '#', 'label' => 'Instagram', 'new_tab' => false],
                 ['icon' => 'x', 'url' => '#', 'label' => 'X', 'new_tab' => false],
-                ['icon' => 'pinterest', 'url' => '#', 'label' => 'Pinterest', 'new_tab' => false],
+                ['icon' => 'linkedin', 'url' => '#', 'label' => 'LinkedIn', 'new_tab' => false],
             ],
         ];
     }

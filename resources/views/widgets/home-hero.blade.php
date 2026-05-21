@@ -22,185 +22,245 @@
     }
     $slideInterval = max(3, min(120, (int) ($s['hero_slide_interval'] ?? 6)));
     $slideAutoplay = array_key_exists('hero_slides_autoplay', $s) ? (bool) $s['hero_slides_autoplay'] : true;
-    $sidePanelUrl = $widget->slug === \App\Models\Widget::HOME_HERO_SLUG ? $widget->heroSidePanelPublicUrl() : null;
+
+    // Combine main landing page as Slide 0, and others as Slide 1..N
+    $allSlides = [];
+    $htmlContent = $widget->content;
+    $headlineHtml = '';
+    $subHtml = '';
+    if (preg_match('/(<h1[^>]*>.*?<\/h1>)/is', $htmlContent, $matches)) {
+        $headlineHtml = $matches[1];
+    }
+    if (preg_match('/(<div class="mukmin-hero__sub"[^>]*>.*?<\/div>)/is', $htmlContent, $matches)) {
+        $subHtml = $matches[1];
+    }
+
+    $allSlides[] = [
+        'is_html_content' => true,
+        'html_headline' => $headlineHtml ?: $htmlContent,
+        'html_sub' => $subHtml,
+        'image_url' => $bgUrl ?: \App\Models\Widget::heroSidePanelDefaultImageUrl(),
+        'cta_label' => __('Join the Movement'),
+        'link_url' => \App\Support\FormUrls::register(),
+        'cta_subtext' => __('Be part of a national effort to connect communities, unlock opportunities, and build a more inclusive future.'),
+        'new_tab' => false,
+    ];
+
+    foreach ($slidesWithMedia as $slide) {
+        $img = \App\Models\Widget::heroSlideImageUrl($slide);
+        $href = \App\Support\FormUrls::resolveCtaUrl(
+            trim((string) ($slide['cta_label'] ?? $slide['title'] ?? '')),
+            (string) ($slide['link_url'] ?? '')
+        );
+        $allSlides[] = [
+            'is_html_content' => false,
+            'title' => trim((string) ($slide['title'] ?? '')) ?: __('Banner'),
+            'description' => trim((string) ($slide['description'] ?? '')),
+            'image_url' => $img,
+            'cta_label' => trim((string) ($slide['cta_label'] ?? '')) ?: __('More details'),
+            'link_url' => $href,
+            'cta_subtext' => null,
+            'new_tab' => !empty($slide['new_tab']),
+        ];
+    }
 @endphp
+
 <section
     class="mukmin-hero"
     style="--mukmin-hero-g1: {{ $g1 }}; --mukmin-hero-g2: {{ $g2 }}; --mukmin-hero-g3: {{ $g3 }}; --mukmin-hero-overlay: {{ $overlay }};"
     aria-labelledby="mukmin-hero-heading"
 >
-    @if ($bgUrl)
-        <div class="mukmin-hero__photo" style="background-image: url('{{ e($bgUrl) }}');" role="presentation"></div>
-    @endif
+    <!-- Background Slides -->
+    <div class="mukmin-hero__bg-slides" aria-hidden="true">
+        @foreach ($allSlides as $si => $slide)
+            <div 
+                class="mukmin-hero__photo js-hero-bg-slide @if($si === 0) active @endif" 
+                style="background-image: url('{{ e($slide['image_url']) }}');" 
+                data-index="{{ $si }}" 
+                role="presentation"
+            ></div>
+        @endforeach
+    </div>
+
+    <!-- Overlays -->
     <div class="mukmin-hero__gradient" aria-hidden="true"></div>
     <div class="mukmin-hero__vignette" aria-hidden="true"></div>
-    @if ($sidePanelUrl)
-        <figure class="mukmin-hero__side-panel" aria-hidden="true">
-            <span class="mukmin-hero__side-panel__img" style="background-image: url({{ json_encode($sidePanelUrl) }});"></span>
-            <span class="mukmin-hero__side-panel__scrim" aria-hidden="true"></span>
-        </figure>
-    @endif
-    <div class="mukmin-hero__inner">
-        {!! $widget->content !!}
-    </div>
 
-    <div class="mukmin-hero__cta" style="position: relative; z-index: 3; text-align: center; margin: clamp(1.5rem, 4vw, 2.5rem) auto 0; max-width: 40rem;">
-        <a href="{{ \App\Support\FormUrls::register() }}" class="btn" style="
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            background: linear-gradient(135deg, #10b981, #0d9488);
-            color: #fff; font-weight: 700; font-size: 1.1rem;
-            padding: 0.85rem 2.25rem; border-radius: 999px; border: none;
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            text-decoration: none;
-        " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 12px 32px rgba(16,185,129,0.45)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 24px rgba(16,185,129,0.35)'">
-            {{ __('Join the Movement') }}
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-        </a>
-        <p style="margin: 0.85rem auto 0; font-size: 0.92rem; color: rgba(255,255,255,0.7); max-width: 34rem; line-height: 1.55; font-weight: 400;">
-            {{ __('Be part of a national effort to connect communities, unlock opportunities, and build a more inclusive future.') }}
-        </p>
-    </div>
-
-    @if (count($slidesWithMedia) > 0)
-        @php
-            $slideCount = count($slidesWithMedia);
-            $heroLoopSec = max(28, min(96, $slideCount * max(5, $slideInterval)));
-        @endphp
-        <div
-            id="mukmin-hero-carousel-{{ $widget->getKey() ?? 'new' }}"
-            class="mukmin-hero-carousel mukmin-hero-carousel--continuous mukmin-hero__banners @unless($slideAutoplay) mukmin-hero-carousel--paused @endunless"
-            role="region"
-            aria-roledescription="{{ __('carousel') }}"
-            aria-label="{{ __('Initiative banners') }}"
-            style="--hero-loop-sec: {{ $heroLoopSec }}s;"
-        >
-            <div class="mukmin-hero-carousel__viewport">
-                <div class="mukmin-hero-carousel__track">
-                    @foreach (array_merge($slidesWithMedia, $slidesWithMedia) as $si => $slide)
-                        @php($isClone = $si >= $slideCount)
-                        @php($img = \App\Models\Widget::heroSlideImageUrl($slide))
-                        @php($href = \App\Support\FormUrls::resolveCtaUrl(
-                            trim((string) ($slide['cta_label'] ?? $slide['title'] ?? '')),
-                            (string) ($slide['link_url'] ?? '')
-                        ))
-                        @php($title = trim((string) ($slide['title'] ?? '')) ?: __('Banner'))
-                        @php($desc = trim((string) ($slide['description'] ?? '')))
-                        @php($ctaCustom = trim((string) ($slide['cta_label'] ?? '')))
-                        @php($cta = $ctaCustom !== '' ? $ctaCustom : __('More details'))
-                        @php($newTab = !empty($slide['new_tab']))
-                        @php($a11yLabel = $desc !== '' ? $title.' — '.$desc : $title)
-                        <div class="mukmin-hero-carousel__card" @if ($isClone) aria-hidden="true" @endif>
-                            @if ($href === '')
-                                <div class="mukmin-hero-carousel__slide mukmin-hero-carousel__slide--nolink" tabindex="0" @if (! $isClone) aria-label="{{ e(\Illuminate\Support\Str::limit($a11yLabel, 240)) }}" @endif>
-                                    <img class="mukmin-hero-carousel__img" src="{{ $img }}" alt="{{ $title }}" loading="lazy" decoding="async" width="1200" height="675">
-                                    <header class="mukmin-hero-carousel__slide-head"><span class="mukmin-hero-carousel__slide-title">{{ $title }}</span></header>
-                                    @if ($desc !== '')
-                                        <div class="mukmin-hero-carousel__slide-hover">
-                                            <p class="mukmin-hero-carousel__slide-desc">{{ $desc }}</p>
-                                        </div>
-                                    @endif
+    <!-- Content Slider -->
+    <div class="mukmin-hero__content-container">
+        @foreach ($allSlides as $si => $slide)
+            <div class="mukmin-hero__content-slide js-hero-content-slide @if($si === 0) active @endif" data-index="{{ $si }}">
+                <div class="mukmin-hero__layout-grid">
+                    <div class="mukmin-hero__layout-left">
+                        @if ($slide['is_html_content'])
+                            {!! $slide['html_headline'] !!}
+                        @else
+                            <h2 class="mukmin-hero__headline">
+                                {{ $slide['title'] }}
+                            </h2>
+                        @endif
+                    </div>
+                    <div class="mukmin-hero__layout-right">
+                        @if ($slide['is_html_content'])
+                            {!! $slide['html_sub'] !!}
+                        @else
+                            @if ($slide['description'])
+                                <div class="mukmin-hero__sub">
+                                    <p class="mukmin-hero__subline">{{ $slide['description'] }}</p>
                                 </div>
-                            @else
-                                <a
-                                    class="mukmin-hero-carousel__slide"
-                                    href="{{ $href }}"
-                                    @if ($newTab) target="_blank" rel="noopener noreferrer" @endif
-                                    @if ($isClone) tabindex="-1" @else tabindex="0" aria-label="{{ e(\Illuminate\Support\Str::limit($a11yLabel, 240)) }}" @endif
-                                >
-                                    <img class="mukmin-hero-carousel__img" src="{{ $img }}" alt="" role="presentation" loading="lazy" decoding="async" width="1200" height="675">
-                                    <header class="mukmin-hero-carousel__slide-head" aria-hidden="true"><span class="mukmin-hero-carousel__slide-title">{{ $title }}</span></header>
-                                    <div class="mukmin-hero-carousel__slide-hover" aria-hidden="true">
-                                        @if ($desc !== '')
-                                            <p class="mukmin-hero-carousel__slide-desc">{{ $desc }}</p>
-                                        @endif
-                                        <span class="mukmin-hero-carousel__slide-cta"><span class="mukmin-hero-carousel__slide-cta-inner">{{ e($cta) }}</span></span>
-                                    </div>
-                                </a>
                             @endif
-                        </div>
-                    @endforeach
+                        @endif
+
+                        @if ($slide['link_url'] !== '')
+                            <div class="mukmin-hero__cta">
+                                <a href="{{ $slide['link_url'] }}" 
+                                   @if ($slide['new_tab']) target="_blank" rel="noopener noreferrer" @endif
+                                   class="btn hero-slider-cta-btn"
+                                >
+                                    {{ $slide['cta_label'] }}
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                </a>
+                                @if (!empty($slide['cta_subtext']))
+                                    <p class="hero-slider-cta-subtext">
+                                        {{ $slide['cta_subtext'] }}
+                                    </p>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
+        @endforeach
+    </div>
+
+    <!-- Navigation Arrows -->
+    @if (count($allSlides) > 1)
+        <button type="button" class="hero-nav-btn hero-nav-btn--left js-hero-prev" aria-label="{{ __('Previous slide') }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="hero-nav-btn hero-nav-btn--right js-hero-next" aria-label="{{ __('Next slide') }}">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+
+        <!-- Bullet Indicators -->
+        <div class="hero-indicators">
+            @foreach ($allSlides as $si => $slide)
+                <button type="button" class="hero-indicator-dot js-hero-indicator @if($si === 0) active @endif" data-index="{{ $si }}" aria-label="{{ __('Go to slide :num', ['num' => $si + 1]) }}"></button>
+            @endforeach
         </div>
-        <script>
-        (function () {
-            var root = document.getElementById('mukmin-hero-carousel-{{ $widget->getKey() ?? "new" }}');
-            if (!root) return;
-            var viewport = root.querySelector('.mukmin-hero-carousel__viewport');
-            var track = root.querySelector('.mukmin-hero-carousel__track');
-            if (!viewport || !track) return;
-
-            function syncSlideWidth() {
-                var w = window.innerWidth || document.documentElement.clientWidth || 0;
-                var peek = 3.25;
-                if (w <= 420) {
-                    peek = 1.08;
-                } else if (w <= 520) {
-                    peek = 1.12;
-                } else if (w <= 640) {
-                    peek = 1.22;
-                } else if (w <= 768) {
-                    peek = 1.45;
-                } else if (w <= 900) {
-                    peek = 2.05;
-                } else if (w <= 1100) {
-                    peek = 2.55;
-                }
-                var visibleGaps = Math.max(0, Math.ceil(peek) - 1);
-                var vw = viewport.clientWidth;
-                var st = window.getComputedStyle(track);
-                var g = parseFloat(st.columnGap || st.gap || '0', 10);
-                if (isNaN(g)) g = 0;
-                var slideW = Math.max(200, (vw - visibleGaps * g) / peek);
-                viewport.style.setProperty('--hero-slide-w', slideW + 'px');
-            }
-
-            syncSlideWidth();
-            if (typeof ResizeObserver !== 'undefined') {
-                new ResizeObserver(syncSlideWidth).observe(viewport);
-            }
-            var resizeT;
-            window.addEventListener('resize', function () {
-                clearTimeout(resizeT);
-                resizeT = setTimeout(syncSlideWidth, 50);
-            });
-        })();
-        </script>
     @endif
 
-    @if ($sidePanelUrl)
-        <script>
-        (function () {
-            var roots = document.querySelectorAll('section.mukmin-hero');
-            roots.forEach(function (root) {
-                var origin = root.querySelector('.mukmin-hero__side-panel-origin');
-                if (!origin) return;
-                function sync() {
-                    var hr = root.getBoundingClientRect();
-                    var r = origin.getBoundingClientRect();
-                    var gap = 10;
-                    var minPanelW = 200;
-                    var rightGutter = Math.max(10, Math.min(28, hr.width * 0.018 + 8));
-                    var candidate = r.right - hr.left + gap;
-                    var maxLeft = Math.max(minPanelW + 24, hr.width - rightGutter - minPanelW);
-                    var leftPx = Math.max(8, Math.min(maxLeft, candidate));
-                    root.style.setProperty('--mukmin-side-panel-left', leftPx + 'px');
-                }
-                if (document.fonts && document.fonts.ready) {
-                    document.fonts.ready.then(sync);
+    <script>
+    (function () {
+        var hero = document.querySelector('.mukmin-hero');
+        if (!hero) return;
+
+        var bgSlides = hero.querySelectorAll('.js-hero-bg-slide');
+        var contentSlides = hero.querySelectorAll('.js-hero-content-slide');
+        var dots = hero.querySelectorAll('.js-hero-indicator');
+        var prevBtn = hero.querySelector('.js-hero-prev');
+        var nextBtn = hero.querySelector('.js-hero-next');
+
+        var currentIndex = 0;
+        var totalSlides = bgSlides.length;
+        if (totalSlides <= 1) return;
+
+        var slideInterval = {{ $slideInterval * 1000 }};
+        var autoplay = {{ $slideAutoplay ? 'true' : 'false' }};
+        var timer = null;
+
+        function showSlide(index) {
+            if (index < 0) {
+                index = totalSlides - 1;
+            } else if (index >= totalSlides) {
+                index = 0;
+            }
+
+            currentIndex = index;
+
+            // Update background slides
+            bgSlides.forEach(function (slide, i) {
+                if (i === currentIndex) {
+                    slide.classList.add('active');
                 } else {
-                    sync();
-                }
-                window.addEventListener('resize', sync);
-                if (typeof ResizeObserver !== 'undefined') {
-                    var ro = new ResizeObserver(sync);
-                    ro.observe(root);
-                    var inner = root.querySelector('.mukmin-hero__inner');
-                    if (inner) ro.observe(inner);
+                    slide.classList.remove('active');
                 }
             });
-        })();
-        </script>
-    @endif
+
+            // Update content slides
+            contentSlides.forEach(function (slide, i) {
+                if (i === currentIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            // Update dots
+            dots.forEach(function (dot, i) {
+                if (i === currentIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            showSlide(currentIndex + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentIndex - 1);
+        }
+
+        function startTimer() {
+            if (autoplay && !timer) {
+                timer = setInterval(nextSlide, slideInterval);
+            }
+        }
+
+        function stopTimer() {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function () {
+                prevSlide();
+                stopTimer();
+                startTimer();
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function () {
+                nextSlide();
+                stopTimer();
+                startTimer();
+            });
+        }
+
+        dots.forEach(function (dot) {
+            dot.addEventListener('click', function () {
+                var idx = parseInt(dot.getAttribute('data-index'), 10);
+                showSlide(idx);
+                stopTimer();
+                startTimer();
+            });
+        });
+
+        // Display states initialized by CSS grid active class
+
+        // Autoplay mouse events
+        hero.addEventListener('mouseenter', stopTimer);
+        hero.addEventListener('mouseleave', startTimer);
+        hero.addEventListener('focusin', stopTimer);
+        hero.addEventListener('focusout', startTimer);
+
+        startTimer();
+    })();
+    </script>
 </section>

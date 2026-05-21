@@ -58,23 +58,7 @@
 <div class="site-footer__bar">
     <div class="site-footer__bar-inner">
         <p class="site-footer__copy">
-            &copy; {{ date('Y') }} {{ $siteName ?? config('app.name') }}@if ($suffix !== ''). {{ $suffix }}@endif
+            &copy; 2026 Pertubuhan Gabungan Mukmin Nasional (PPM-019-10-15042026) - All Rights Reserved
         </p>
-        @if (count($socials) > 0)
-            <ul class="site-footer__social" aria-label="{{ __('Social media') }}">
-                @foreach ($socials as $soc)
-                    <li>
-                        <a
-                            class="site-footer__social-btn"
-                            href="{{ $soc['url'] }}"
-                            aria-label="{{ $soc['label'] }}"
-                            @if (! empty($soc['new_tab'])) target="_blank" rel="noopener noreferrer" @endif
-                        >
-                            @include('widgets.partials.site-footer-social-svg', ['icon' => $soc['icon']])
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        @endif
     </div>
 </div>

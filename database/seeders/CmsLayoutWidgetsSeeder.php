@@ -60,7 +60,7 @@ HTML;
                 'settings' => [
                     'cms_layout' => 'lead',
                     'image_url' => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&h=800&q=80',
-                    'eyebrow' => 'About MUKMIN',
+                    'eyebrow' => 'About Us',
                     'headline' => 'One movement for inclusive, sustainable communities',
                     'subheadline' => 'MUKMIN connects organisations, institutions, and grassroots networks across Malaysia — aligning action and scaling impact.',
                     'ctas' => [

@@ -21,8 +21,8 @@
     }
     .premium-input:focus, .premium-select:focus {
         background-color: #ffffff;
-        border-color: #10b981;
-        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.12);
+        border-color: #d97706;
+        box-shadow: 0 4px 15px rgba(217, 119, 6, 0.12);
         outline: none;
         transform: translateY(-1px);
     }
@@ -71,7 +71,7 @@
         left: 0;
         width: 60px;
         height: 2px;
-        background: #10b981;
+        background: #d97706;
     }
     .file-upload-wrapper {
         background: #ffffff;
@@ -91,10 +91,10 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
     .file-upload-wrapper:hover {
-        border-color: #10b981;
+        border-color: #d97706;
         background: #f8fafc;
         transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
+        box-shadow: 0 10px 15px -3px rgba(217, 119, 6, 0.1);
     }
     .file-upload-wrapper input[type="file"] {
         position: absolute;
@@ -110,7 +110,7 @@
         width: 64px;
         height: 64px;
         background: #ecfdf5;
-        color: #10b981;
+        color: #d97706;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -120,7 +120,7 @@
         transition: all 0.3s ease;
     }
     .file-upload-wrapper:hover .file-upload-icon {
-        background: #10b981;
+        background: #d97706;
         color: #ffffff;
         transform: scale(1.05);
     }
@@ -153,8 +153,8 @@
         z-index: 1;
     }
     .file-upload-wrapper:hover .file-upload-btn-fake {
-        border-color: #10b981;
-        color: #10b981;
+        border-color: #d97706;
+        color: #d97706;
         background: #ecfdf5;
     }
     
@@ -166,7 +166,7 @@
         transition: all 0.2s ease;
     }
     .form-check-premium:hover {
-        border-color: #10b981;
+        border-color: #d97706;
     }
     .sub-heading {
         color: #475569;
@@ -187,7 +187,7 @@
         text-align: center;
     }
     .radio-card:hover {
-        border-color: #10b981;
+        border-color: #d97706;
         background: #f1fdf8;
     }
     .radio-card input[type="radio"]:checked + label {
@@ -195,7 +195,7 @@
         font-weight: bold;
     }
     .radio-card input[type="radio"]:checked {
-        accent-color: #10b981;
+        accent-color: #d97706;
     }
     
     .form-text-custom {
@@ -577,15 +577,15 @@
                     const fileName = this.files[0].name;
                     fakeBtn.textContent = fileName;
                     fakeBtn.style.backgroundColor = '#ecfdf5';
-                    fakeBtn.style.color = '#10b981';
-                    fakeBtn.style.borderColor = '#10b981';
+                    fakeBtn.style.color = '#d97706';
+                    fakeBtn.style.borderColor = '#d97706';
                     
                     // Change icon to a checkmark indicating success
                     iconElement.className = 'bi bi-check-circle-fill';
-                    iconContainer.style.backgroundColor = '#10b981';
+                    iconContainer.style.backgroundColor = '#d97706';
                     iconContainer.style.color = '#ffffff';
                     
-                    wrapper.style.borderColor = '#10b981';
+                    wrapper.style.borderColor = '#d97706';
                     wrapper.style.backgroundColor = '#f1fdf8';
                 } else {
                     fakeBtn.textContent = 'Choose File';

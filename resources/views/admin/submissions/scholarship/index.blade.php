@@ -36,7 +36,7 @@
     }
     .badge-soft-primary {
         background-color: #ecfdf5;
-        color: #10b981;
+        color: #d97706;
         padding: 0.4rem 0.8rem;
         border-radius: 6px;
         font-weight: 600;

@@ -6,11 +6,7 @@
     <legend style="font-weight:700;padding:0 0.35rem">{{ __('Voices of Change (testimonials)') }}</legend>
     <p class="muted" style="margin:0 0 1rem;font-size:0.9rem">{{ __('Shown when the slug is “home-voices”. Cards scroll horizontally in a loop; add as many voices as you need (empty rows are ignored).') }}</p>
 
-    <label class="field">
-        <span>{{ __('Eyebrow line') }}</span>
-        <input type="text" name="voices_eyebrow" value="{{ old('voices_eyebrow', $s['voices_eyebrow'] ?? $defs['voices_eyebrow'] ?? '') }}" maxlength="500">
-        @error('voices_eyebrow')<span class="error">{{ $message }}</span>@enderror
-    </label>
+    <input type="hidden" name="voices_eyebrow" value="">
     <label class="field">
         <span>{{ __('Main heading') }}</span>
         <input type="text" name="voices_title" value="{{ old('voices_title', $s['voices_title'] ?? $defs['voices_title'] ?? '') }}" maxlength="300">
@@ -47,8 +43,8 @@
                 @error("voices_items.$i.role")<span class="error">{{ $message }}</span>@enderror
             </label>
             <label class="field">
-                <span>{{ __('Quote') }}</span>
-                <textarea name="voices_items[{{ $i }}][quote]" rows="3" maxlength="1200">{{ old("voices_items.$i.quote", $row['quote'] ?? $di['quote'] ?? '') }}</textarea>
+                <span>{{ __('YouTube Video URL') }}</span>
+                <input type="url" name="voices_items[{{ $i }}][quote]" value="{{ old("voices_items.$i.quote", $row['quote'] ?? $di['quote'] ?? '') }}" placeholder="https://www.youtube.com/watch?v=..." maxlength="1200">
                 @error("voices_items.$i.quote")<span class="error">{{ $message }}</span>@enderror
             </label>
             <label class="field">

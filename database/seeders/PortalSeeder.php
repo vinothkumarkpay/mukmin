@@ -23,7 +23,7 @@ class PortalSeeder extends Seeder
         $cmsSeeds = [
             [
                 'slug' => 'about-mukmin',
-                'title' => 'About MUKMIN',
+                'title' => 'About Us',
                 'excerpt' => 'Hub for MUKMIN identity, team, and ecosystem entry points.',
                 'body' => '',
             ],
@@ -101,7 +101,7 @@ class PortalSeeder extends Seeder
 
         $aboutMukmin = MenuItem::query()->create([
             'parent_id' => null,
-            'label' => 'About MUKMIN',
+            'label' => 'About Us',
             'url' => '/page/about-mukmin',
             'sort_order' => 10,
             'is_active' => true,
@@ -130,7 +130,6 @@ class PortalSeeder extends Seeder
             ['Our Ecosystem', '/page/our-ecosystem', 20],
             ['Impact Areas', '/page/impact-areas', 30],
             ['Featured Initiatives', '/page/featured-initiatives', 40],
-            ['CTA / Partners', '/page/cta-partners', 50],
         ] as $top) {
             MenuItem::query()->create([
                 'parent_id' => null,
@@ -141,6 +140,42 @@ class PortalSeeder extends Seeder
                 'open_new_tab' => false,
             ]);
         }
+
+        $mediaCenter = MenuItem::query()->create([
+            'parent_id' => null,
+            'label' => 'Media Center',
+            'url' => '#',
+            'sort_order' => 50,
+            'is_active' => true,
+            'open_new_tab' => false,
+        ]);
+
+        MenuItem::query()->create([
+            'parent_id' => $mediaCenter->id,
+            'label' => 'News Letter',
+            'url' => '/page/news-letter',
+            'sort_order' => 0,
+            'is_active' => true,
+            'open_new_tab' => false,
+        ]);
+
+        MenuItem::query()->create([
+            'parent_id' => $mediaCenter->id,
+            'label' => 'Gallery',
+            'url' => '/page/gallery',
+            'sort_order' => 10,
+            'is_active' => true,
+            'open_new_tab' => false,
+        ]);
+
+        MenuItem::query()->create([
+            'parent_id' => null,
+            'label' => 'Contact Us',
+            'url' => '/contact-us',
+            'sort_order' => 60,
+            'is_active' => true,
+            'open_new_tab' => false,
+        ]);
 
         Widget::query()->updateOrCreate(
             ['slug' => 'home-hero'],
@@ -182,7 +217,7 @@ HTML
         Widget::query()->updateOrCreate(
             ['slug' => Widget::HOME_VOICES_SLUG],
             [
-                'title' => 'Voices of Change',
+                'title' => 'Voices of Mukmin',
                 'zone' => 'home',
                 'cms_page_id' => null,
                 'content' => '',

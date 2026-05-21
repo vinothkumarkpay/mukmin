@@ -44,7 +44,7 @@
         margin: 0 0 0.35rem;
     }
     .reg-section-hint { color: #64748b; font-size: 0.9rem; margin: 0 0 1.25rem; line-height: 1.55; }
-    .reg-section-title span { color: #10b981; font-weight: 800; margin-right: 0.35rem; }
+    .reg-section-title span { color: #d97706; font-weight: 800; margin-right: 0.35rem; }
     .reg-grid { display: grid; grid-template-columns: 1fr; gap: 0 1.25rem; }
     @media (min-width: 576px) {
         .reg-grid--2 { grid-template-columns: 1fr 1fr; }
@@ -65,7 +65,7 @@
     }
     .reg-textarea { min-height: 100px; resize: vertical; line-height: 1.55; }
     .reg-input:focus, .reg-textarea:focus, .reg-select:focus {
-        background: #fff; border-color: #10b981;
+        background: #fff; border-color: #d97706;
         box-shadow: 0 0 0 4px rgba(16,185,129,0.12); outline: none;
     }
     .reg-input.is-invalid, .reg-textarea.is-invalid { border-color: #ef4444; background: #fef2f2; }
@@ -81,7 +81,7 @@
         transition: border-color 0.2s, background 0.2s; margin: 0;
     }
     .reg-check:hover { border-color: #cbd5e1; }
-    .reg-check:has(input:checked) { border-color: #10b981; background: #ecfdf5; }
+    .reg-check:has(input:checked) { border-color: #d97706; background: #fffbeb; }
     .reg-check input { width: 1.1rem; height: 1.1rem; margin-top: 0.15rem; flex-shrink: 0; accent-color: #0f3d2c; }
     .reg-check span { font-size: 0.95rem; color: #334155; font-weight: 500; line-height: 1.4; }
     .reg-radio-group { display: flex; flex-wrap: wrap; gap: 1rem; }
@@ -90,7 +90,7 @@
         padding: 0.75rem 1.25rem; background: #f8fafc;
         border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; margin: 0;
     }
-    .reg-radio:has(input:checked) { border-color: #10b981; background: #ecfdf5; }
+    .reg-radio:has(input:checked) { border-color: #d97706; background: #fffbeb; }
     .reg-radio input { accent-color: #0f3d2c; }
     .reg-other-wrap { margin-top: 1rem; }
     .reg-bearer-card {
@@ -104,7 +104,7 @@
         border: 2px dashed #cbd5e1; border-radius: 12px; text-align: center;
         transition: border-color 0.2s, background 0.2s;
     }
-    .reg-file:hover { border-color: #10b981; background: #f1fdf8; }
+    .reg-file:hover { border-color: #d97706; background: #fffbeb; }
     .reg-file p { margin: 0 0 0.75rem; color: #64748b; font-size: 0.9rem; }
     .reg-file input[type="file"] { font-size: 0.9rem; width: 100%; }
     .reg-declaration {
