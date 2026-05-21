@@ -233,6 +233,13 @@
         </div>
     </header>
 
+    <div style="margin-bottom: 1.25rem;">
+        <a href="{{ route('register.show') }}" style="display:inline-flex;align-items:center;gap:0.4rem;color:#64748b;font-size:0.92rem;font-weight:600;text-decoration:none;transition:color 0.2s;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            Back to membership selection
+        </a>
+    </div>
+
     <div class="reg-form-card">
         @if(session('success'))
             <div class="reg-alert reg-alert--success" role="status"><strong>Submitted!</strong> {{ session('success') }}</div>
@@ -246,7 +253,7 @@
             </div>
         @endif
 
-        <form action="{{ route('register.submit') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('register.ordinary.submit') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             {{-- Section A --}}

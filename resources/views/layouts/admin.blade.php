@@ -20,6 +20,7 @@
         <div class="nav-section">{{ __('Submissions') }}</div>
         <a href="{{ route('admin.submissions.contact.index') }}">{{ __('Contact Us') }}</a>
         <a href="{{ route('admin.submissions.registration.index') }}">{{ __('Registrations') }}</a>
+        <a href="{{ route('submissions.friends.index') }}">{{ __('Friends of MUKMIN') }}</a>
         <a href="{{ route('admin.submissions.scholarship.index') }}">{{ __('Scholarships') }}</a>
         
         <div class="nav-section">{{ __('Site') }}</div>
@@ -43,6 +44,7 @@
                     <hr>
                     <a href="{{ route('admin.submissions.contact.index') }}">{{ __('Contact Submissions') }}</a>
                     <a href="{{ route('admin.submissions.registration.index') }}">{{ __('Registrations') }}</a>
+                    <a href="{{ route('submissions.friends.index') }}">{{ __('Friends of MUKMIN') }}</a>
                     <a href="{{ route('admin.submissions.scholarship.index') }}">{{ __('Scholarships') }}</a>
                     <hr>
                     <a href="{{ route('home') }}" target="_blank" rel="noopener noreferrer">{{ __('View website') }}</a>

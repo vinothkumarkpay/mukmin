@@ -21,8 +21,11 @@ Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 Route::get('/contact-us', [FormSubmissionController::class, 'showContactForm'])->name('contact.show');
 Route::post('/contact-us', [FormSubmissionController::class, 'submitContactForm'])->name('contact.submit');
 
-Route::get('/register', [FormSubmissionController::class, 'showRegistrationForm'])->name('register.show');
-Route::post('/register', [FormSubmissionController::class, 'submitRegistrationForm'])->name('register.submit');
+Route::get('/register', [FormSubmissionController::class, 'showMembershipSelection'])->name('register.show');
+Route::get('/register/ordinary', [FormSubmissionController::class, 'showRegistrationForm'])->name('register.ordinary.show');
+Route::post('/register/ordinary', [FormSubmissionController::class, 'submitRegistrationForm'])->name('register.ordinary.submit');
+Route::get('/register/friends', [FormSubmissionController::class, 'showFriendsForm'])->name('register.friends.show');
+Route::post('/register/friends', [FormSubmissionController::class, 'submitFriendsForm'])->name('register.friends.submit');
 
 Route::get('/apply-scholarship', [FormSubmissionController::class, 'showScholarshipForm'])->name('scholarship.show');
 Route::post('/apply-scholarship', [FormSubmissionController::class, 'submitScholarshipForm'])->name('scholarship.submit');
@@ -55,4 +58,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     Route::get('/submissions/scholarship', [SubmissionController::class, 'scholarshipIndex'])->name('submissions.scholarship.index');
     Route::get('/submissions/scholarship/{submission}', [SubmissionController::class, 'scholarshipShow'])->name('submissions.scholarship.show');
+    
+    Route::get('/submissions/friends', [SubmissionController::class, 'friendsIndex'])->name('submissions.friends.index');
+    Route::get('/submissions/friends/{submission}', [SubmissionController::class, 'friendsShow'])->name('submissions.friends.show');
 });

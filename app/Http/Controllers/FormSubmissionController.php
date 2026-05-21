@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use App\Models\ContactSubmission;
 use App\Models\RegistrationSubmission;
 use App\Models\ScholarshipApplication;
+use App\Models\FriendsRegistration;
 
 class FormSubmissionController extends Controller
 {
@@ -29,9 +30,68 @@ class FormSubmissionController extends Controller
         return redirect()->back()->with('success', 'Thank you for getting in touch. We will respond shortly.');
     }
 
+    public function showMembershipSelection()
+    {
+        return view('pages.register-select');
+    }
+
     public function showRegistrationForm()
     {
         return view('pages.register');
+    }
+
+    public function showFriendsForm()
+    {
+        return view('pages.register-friends');
+    }
+
+    public function submitFriendsForm(Request $request)
+    {
+        $validated = $request->validate([
+            'organization_category' => ['required', 'string', Rule::in(['Surau', 'Madrasah', 'Others'])],
+            'organization_category_other' => [
+                Rule::requiredIf(fn () => $request->input('organization_category') === 'Others'),
+                'nullable', 'string', 'max:255',
+            ],
+            'org_name' => 'nullable|string|max:255',
+            'org_registration_number' => 'nullable|string|max:255',
+            'org_state' => 'nullable|string|max:255',
+            'org_address' => 'nullable|string',
+            'org_email' => 'nullable|email|max:255',
+            'org_contact_number' => 'nullable|string|max:255',
+            'org_website' => 'nullable|string|max:500',
+
+            'individual_name' => 'nullable|string|max:255',
+            'individual_nric' => 'nullable|string|max:255',
+            'individual_state' => 'nullable|string|max:255',
+            'individual_address' => 'nullable|string',
+            'individual_email' => 'nullable|email|max:255',
+            'individual_contact_number' => 'nullable|string|max:255',
+
+            'agreed_to_accuracy' => 'accepted',
+            'agreed_to_policies' => 'accepted',
+        ]);
+
+        FriendsRegistration::create([
+            'organization_category' => $validated['organization_category'],
+            'organization_category_other' => $validated['organization_category_other'] ?? null,
+            'org_name' => $validated['org_name'] ?? null,
+            'org_registration_number' => $validated['org_registration_number'] ?? null,
+            'org_state' => $validated['org_state'] ?? null,
+            'org_address' => $validated['org_address'] ?? null,
+            'org_email' => $validated['org_email'] ?? null,
+            'org_contact_number' => $validated['org_contact_number'] ?? null,
+            'org_website' => $validated['org_website'] ?? null,
+            'individual_name' => $validated['individual_name'] ?? null,
+            'individual_nric' => $validated['individual_nric'] ?? null,
+            'individual_state' => $validated['individual_state'] ?? null,
+            'individual_address' => $validated['individual_address'] ?? null,
+            'individual_email' => $validated['individual_email'] ?? null,
+            'individual_contact_number' => $validated['individual_contact_number'] ?? null,
+            'agreed_to_declaration' => true,
+        ]);
+
+        return redirect()->route('register.show')->with('success', 'Registration submitted successfully.');
     }
 
     public function submitRegistrationForm(Request $request)

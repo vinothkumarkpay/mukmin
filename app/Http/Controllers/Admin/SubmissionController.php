@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactSubmission;
 use App\Models\RegistrationSubmission;
 use App\Models\ScholarshipApplication;
+use App\Models\FriendsRegistration;
 
 class SubmissionController extends Controller
 {
@@ -40,5 +41,16 @@ class SubmissionController extends Controller
     public function scholarshipShow(ScholarshipApplication $submission)
     {
         return view('admin.submissions.scholarship.show', compact('submission'));
+    }
+
+    public function friendsIndex()
+    {
+        $submissions = FriendsRegistration::latest()->paginate(20);
+        return view('admin.submissions.friends.index', compact('submissions'));
+    }
+
+    public function friendsShow(FriendsRegistration $submission)
+    {
+        return view('admin.submissions.friends.show', compact('submission'));
     }
 }
