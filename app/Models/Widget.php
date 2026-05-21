@@ -321,7 +321,7 @@ class Widget extends Model
         return [
             'join_title' => __('Join the Movement'),
             'join_subtitle' => __('Be part of a national effort to connect communities, unlock opportunities, and build a more inclusive future.'),
-            'join_primary_label' => __('Register as a member'),
+            'join_primary_label' => __('Register Now'),
             'join_primary_url' => '/register',
             'join_primary_new_tab' => false,
             'join_secondary_label' => __('Donate for a better future'),

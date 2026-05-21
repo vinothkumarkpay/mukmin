@@ -40,7 +40,7 @@
         'html_headline' => $headlineHtml ?: $htmlContent,
         'html_sub' => $subHtml,
         'image_url' => $bgUrl ?: \App\Models\Widget::heroSidePanelDefaultImageUrl(),
-        'cta_label' => __('Join the Movement'),
+        'cta_label' => __('Register Now'),
         'link_url' => \App\Support\FormUrls::register(),
         'cta_subtext' => __('Be part of a national effort to connect communities, unlock opportunities, and build a more inclusive future.'),
         'new_tab' => false,

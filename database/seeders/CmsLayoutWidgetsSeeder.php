@@ -66,7 +66,6 @@ HTML;
                     'ctas' => [
                         ['label' => 'Who We Are', 'url' => '/page/who-we-are', 'style' => 'primary', 'new_tab' => false],
                         ['label' => 'The Team', 'url' => '/page/the-team', 'style' => 'ghost', 'new_tab' => false],
-                        ['label' => 'Explore Our Ecosystem', 'url' => '/page/our-ecosystem', 'style' => 'ghost', 'new_tab' => false],
                     ],
                 ],
                 'sort_order' => 0,
