@@ -169,18 +169,27 @@
         var autoplay = {{ $slideAutoplay ? 'true' : 'false' }};
         var timer = null;
 
-        function showSlide(index) {
+        function showSlide(index, direction) {
             if (index < 0) {
                 index = totalSlides - 1;
             } else if (index >= totalSlides) {
                 index = 0;
             }
 
+            if (index === currentIndex) {
+                return;
+            }
+
+            direction = (direction === 'prev') ? 'prev' : 'next';
             currentIndex = index;
 
-            // Update background slides
+            // Update background slides — apply direction class so CSS picks the right slide-in keyframe
             bgSlides.forEach(function (slide, i) {
+                slide.classList.remove('slide-prev', 'slide-next');
                 if (i === currentIndex) {
+                    slide.classList.add(direction === 'prev' ? 'slide-prev' : 'slide-next');
+                    // Force reflow so the slide-in animation restarts cleanly
+                    void slide.offsetWidth;
                     slide.classList.add('active');
                 } else {
                     slide.classList.remove('active');
@@ -207,11 +216,11 @@
         }
 
         function nextSlide() {
-            showSlide(currentIndex + 1);
+            showSlide(currentIndex + 1, 'next');
         }
 
         function prevSlide() {
-            showSlide(currentIndex - 1);
+            showSlide(currentIndex - 1, 'prev');
         }
 
         function startTimer() {
@@ -246,7 +255,8 @@
         dots.forEach(function (dot) {
             dot.addEventListener('click', function () {
                 var idx = parseInt(dot.getAttribute('data-index'), 10);
-                showSlide(idx);
+                var dir = (idx < currentIndex) ? 'prev' : 'next';
+                showSlide(idx, dir);
                 stopTimer();
                 startTimer();
             });
