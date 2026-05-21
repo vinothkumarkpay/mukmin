@@ -193,7 +193,7 @@ class Widget extends Model
                 'description' => __('Talks, stories, and learning journeys that inspire purposeful action.'),
                 'cta_label' => __('View SIRAT Series'),
                 'link_url' => '/page/about-mukmin',
-                'image_url' => 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1920&q=80',
+                'image_url' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&h=1200&q=82',
                 'image_path' => null,
                 'new_tab' => false,
             ],

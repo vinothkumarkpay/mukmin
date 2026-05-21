@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateSiratSlideToBlueOcean extends Migration
+class FixSiratSlideTropicalBeach extends Migration
 {
     public function up()
     {
@@ -23,12 +23,15 @@ class UpdateSiratSlideToBlueOcean extends Migration
             $settings = is_array($decoded) ? $decoded : [];
         }
 
-        $newSiratImage = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&h=1200&q=82';
+        $beachImage = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&h=1200&q=82';
 
         $slides = isset($settings['hero_slides']) && is_array($settings['hero_slides']) ? $settings['hero_slides'] : [];
 
         if (isset($slides[0]) && is_array($slides[0]) && empty($slides[0]['image_path'])) {
-            $slides[0]['image_url'] = $newSiratImage;
+            $title = trim((string) ($slides[0]['title'] ?? ''));
+            if ($title === '' || stripos($title, 'SIRAT') !== false) {
+                $slides[0]['image_url'] = $beachImage;
+            }
         }
 
         $settings['hero_slides'] = $slides;

@@ -22,8 +22,8 @@ html {
     --radius: 10px;
     --shadow: 0 1px 3px rgba(120, 53, 15, 0.08);
     --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-hero-display: "Fraunces", Georgia, "Times New Roman", serif;
-    --font-hero-sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-hero-display: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-hero-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
     --header-h: 64px;
 }
 
@@ -1770,6 +1770,11 @@ details.admin-nav-drawer[open] summary {
     margin-top: 0;
 }
 
+/* Flush hero directly under header */
+.main-wrap:has(> .home-hero-fullbleed:first-child) {
+    padding-top: 0;
+}
+
 /* Full viewport width; horizontal overflow clipped on html to avoid vw vs scrollbar gap */
 .home-hero-fullbleed {
     position: relative;
@@ -1779,6 +1784,15 @@ details.admin-nav-drawer[open] summary {
     margin-right: calc(50% - 50vw);
     margin-top: calc(-1 * var(--main-pad-top, 1.25rem));
     overflow-x: clip;
+}
+
+.main-wrap:has(> .home-hero-fullbleed:first-child) .home-hero-fullbleed {
+    margin-top: 0;
+}
+
+.home-hero-fullbleed .mukmin-hero--split {
+    padding-top: 0;
+    margin-top: 0;
 }
 
 .mukmin-hero {
@@ -2199,6 +2213,286 @@ details.admin-nav-drawer[open] summary {
 
     .mukmin-hero__sub {
         margin: 0;
+    }
+}
+
+/* Split hero: image left, overlapping content card right */
+.mukmin-hero--split {
+    --hero-card-heading: #0b5c47;
+    --hero-card-heading-accent: #0d9488;
+    --hero-card-heading-alt: #134e6f;
+    --hero-card-body: #3f5249;
+    --hero-card-muted: #5c6f68;
+    --hero-card-cta-bg: #0d9488;
+    --hero-card-cta-hover: #0f766e;
+    display: block;
+    align-items: stretch;
+    justify-content: flex-start;
+    text-align: left;
+    color: var(--hero-card-body);
+    background: #f7f8f7;
+    min-height: auto;
+    padding: 0 0 clamp(1.25rem, 2.5vw, 1.75rem);
+    font-family: var(--font-hero-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.mukmin-hero--split .mukmin-hero__slider {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    min-height: clamp(22rem, 42vw, 30rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.mukmin-hero--split .mukmin-hero__slide {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mukmin-hero--split .mukmin-hero__slide.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 2;
+}
+
+.mukmin-hero--split .mukmin-hero__media {
+    position: relative;
+    min-height: clamp(16rem, 38vw, 22rem);
+    overflow: hidden;
+    background: #e8ebe8;
+    margin-top: 0;
+}
+
+.mukmin-hero--split .mukmin-hero__photo {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 40%;
+    background-repeat: no-repeat;
+    opacity: 1;
+    visibility: visible;
+    filter: saturate(1.05) contrast(1.03);
+    transform: scale(1);
+    z-index: 0;
+    transition: none;
+}
+
+.mukmin-hero--split .mukmin-hero__slide.active .mukmin-hero__photo {
+    animation: heroSplitZoom 18s ease-out forwards;
+}
+
+@keyframes heroSplitZoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+.mukmin-hero--split .mukmin-hero__card {
+    position: relative;
+    z-index: 3;
+    background: #ffffff;
+    box-shadow:
+        0 1.25rem 2.5rem rgba(15, 61, 44, 0.12),
+        0 4px 12px rgba(15, 61, 44, 0.06);
+    padding: clamp(1.5rem, 3.5vw, 2.75rem);
+    margin-top: -2.5rem;
+    margin-left: clamp(0.75rem, 3vw, 1.5rem);
+    margin-right: clamp(0.75rem, 3vw, 1.5rem);
+}
+
+.mukmin-hero--split .mukmin-hero__card-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 0;
+}
+
+/* Premium display typography (geometric sans, tight stack — SIRAT-style) */
+.mukmin-hero--split .mukmin-hero__headline,
+.mukmin-hero--split .mukmin-hero__card h1,
+.mukmin-hero--split .mukmin-hero__card h2 {
+    margin: 0 0 1.15rem;
+    font-family: var(--font-hero-display);
+    font-weight: 800;
+    font-size: clamp(1.65rem, 3.6vw, 2.65rem);
+    line-height: 0.96;
+    letter-spacing: -0.025em;
+    color: var(--hero-card-heading);
+    text-shadow: none;
+    text-wrap: balance;
+}
+
+.mukmin-hero--split .mukmin-hero__line {
+    display: block;
+    margin: 0;
+    color: var(--hero-card-heading);
+}
+
+.mukmin-hero--split .mukmin-hero__line + .mukmin-hero__line {
+    margin-top: 0.05em;
+}
+
+.mukmin-hero--split .mukmin-hero__headline .mukmin-hero__line:nth-child(2) {
+    color: var(--hero-card-heading-accent);
+}
+
+.mukmin-hero--split .mukmin-hero__headline .mukmin-hero__line:nth-child(3) {
+    color: var(--hero-card-heading-alt);
+}
+
+.mukmin-hero--split .mukmin-hero__card em,
+.mukmin-hero--split .mukmin-hero__card strong {
+    font-weight: 800;
+    font-style: normal;
+    color: var(--hero-card-heading-accent);
+}
+
+.mukmin-hero--split .mukmin-hero__sub {
+    max-width: none;
+    margin: 0 0 1.4rem;
+    font-family: var(--font-hero-sans);
+    font-weight: 500;
+    font-size: clamp(0.94rem, 1.55vw, 1.06rem);
+    line-height: 1.55;
+    letter-spacing: 0.012em;
+    color: var(--hero-card-body);
+    text-shadow: none;
+}
+
+.mukmin-hero--split .mukmin-hero__subline {
+    margin: 0;
+    font-weight: 500;
+}
+
+.mukmin-hero--split .mukmin-hero__subline + .mukmin-hero__subline {
+    margin-top: 0.75rem;
+}
+
+.mukmin-hero--split .mukmin-hero__cta {
+    margin-top: 0.15rem;
+}
+
+.mukmin-hero--split .hero-slider-cta-btn {
+    font-family: var(--font-hero-sans);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 0.3rem;
+    padding: 0.8rem 1.65rem;
+    background: var(--hero-card-cta-bg);
+    box-shadow: 0 4px 14px rgba(13, 148, 136, 0.32);
+}
+
+.mukmin-hero--split .hero-slider-cta-btn:hover {
+    background: var(--hero-card-cta-hover);
+    box-shadow: 0 6px 18px rgba(13, 148, 136, 0.42);
+}
+
+.mukmin-hero--split .hero-slider-cta-subtext {
+    font-family: var(--font-hero-sans);
+    font-weight: 400;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+    color: var(--hero-card-muted);
+    margin: 0.85rem 0 0;
+}
+
+.mukmin-hero--split .hero-nav-btn {
+    z-index: 20;
+    background: rgba(15, 61, 44, 0.55);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.mukmin-hero--split .hero-nav-btn--left {
+    left: clamp(0.35rem, 1.5vw, 0.85rem);
+}
+
+.mukmin-hero--split .hero-nav-btn--right {
+    right: clamp(0.35rem, 1.5vw, 0.85rem);
+}
+
+.mukmin-hero--split .hero-nav-btn:hover {
+    background: rgba(15, 107, 79, 0.92);
+}
+
+.mukmin-hero--split .hero-indicators {
+    bottom: 1.25rem;
+}
+
+.mukmin-hero--split .hero-indicator-dot {
+    background: rgba(15, 61, 44, 0.25);
+}
+
+.mukmin-hero--split .hero-indicator-dot:hover {
+    background: rgba(15, 61, 44, 0.5);
+}
+
+.mukmin-hero--split .hero-indicator-dot.active {
+    background: #0f6b4f;
+}
+
+.mukmin-hero--split .mukmin-hero__content-slide.active .mukmin-hero__headline,
+.mukmin-hero--split .mukmin-hero__content-slide.active .mukmin-hero__sub,
+.mukmin-hero--split .mukmin-hero__content-slide.active .mukmin-hero__cta,
+.mukmin-hero--split .mukmin-hero__slide.active .mukmin-hero__headline,
+.mukmin-hero--split .mukmin-hero__slide.active .mukmin-hero__sub,
+.mukmin-hero--split .mukmin-hero__slide.active .mukmin-hero__cta {
+    animation: slideTextUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+@media (min-width: 900px) {
+    .mukmin-hero--split .mukmin-hero__slider {
+        min-height: clamp(24rem, 40vw, 34rem);
+    }
+
+    .mukmin-hero--split .mukmin-hero__slide {
+        position: relative;
+        display: block;
+        min-height: clamp(24rem, 40vw, 34rem);
+    }
+
+    .mukmin-hero--split .mukmin-hero__media {
+        width: 58%;
+        height: clamp(24rem, 40vw, 34rem);
+        min-height: clamp(24rem, 40vw, 34rem);
+    }
+
+    /* Card on the right half, vertically centred in the hero row (per reference) */
+    .mukmin-hero--split .mukmin-hero__card {
+        position: absolute;
+        top: 50%;
+        left: 48%;
+        right: clamp(1.75rem, 4.5vw, 4rem);
+        bottom: auto;
+        transform: translateY(-50%);
+        width: auto;
+        max-width: none;
+        margin: 0;
+        padding: clamp(1.75rem, 3vw, 2.5rem) clamp(1.75rem, 3.5vw, 3rem);
+    }
+}
+
+@media (max-width: 899px) {
+    .mukmin-hero--split .mukmin-hero__card {
+        margin-top: -2rem;
+        margin-left: clamp(2.75rem, 10vw, 3.5rem);
+        margin-right: clamp(2.75rem, 10vw, 3.5rem);
     }
 }
 

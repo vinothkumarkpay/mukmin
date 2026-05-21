@@ -36,16 +36,13 @@ class WidgetTest extends TestCase
         $response = $this->get('/');
         $response->assertStatus(200);
 
-        // Check for premium hero bg slide placeholders and classes
-        $response->assertSee('js-hero-bg-slide');
+        $response->assertSee('mukmin-hero--split');
+        $response->assertSee('js-hero-slide');
+        $response->assertSee('mukmin-hero__media');
+        $response->assertSee('mukmin-hero__card');
         $response->assertSee('js-hero-prev');
         $response->assertSee('js-hero-next');
         $response->assertSee('js-hero-indicator');
-
-        // Verify split layout grid classes are present
-        $response->assertSee('mukmin-hero__layout-grid');
-        $response->assertSee('mukmin-hero__layout-left');
-        $response->assertSee('mukmin-hero__layout-right');
 
         // Verify LinkedIn social button is in the top section
         $response->assertSee('header-social-btn--linkedin');

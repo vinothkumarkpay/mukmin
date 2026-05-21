@@ -23,7 +23,6 @@
     $slideInterval = max(3, min(120, (int) ($s['hero_slide_interval'] ?? 6)));
     $slideAutoplay = array_key_exists('hero_slides_autoplay', $s) ? (bool) $s['hero_slides_autoplay'] : true;
 
-    // Combine main landing page as Slide 0, and others as Slide 1..N
     $allSlides = [];
     $htmlContent = $widget->content;
     $headlineHtml = '';
@@ -66,44 +65,35 @@
 @endphp
 
 <section
-    class="mukmin-hero"
+    class="mukmin-hero mukmin-hero--split"
     style="--mukmin-hero-g1: {{ $g1 }}; --mukmin-hero-g2: {{ $g2 }}; --mukmin-hero-g3: {{ $g3 }}; --mukmin-hero-overlay: {{ $overlay }};"
     aria-labelledby="mukmin-hero-heading"
 >
-    <!-- Background Slides -->
-    <div class="mukmin-hero__bg-slides" aria-hidden="true">
+    <div class="mukmin-hero__slider">
         @foreach ($allSlides as $si => $slide)
-            <div 
-                class="mukmin-hero__photo js-hero-bg-slide @if($si === 0) active @endif" 
-                style="background-image: url('{{ e($slide['image_url']) }}');" 
-                data-index="{{ $si }}" 
-                role="presentation"
-            ></div>
-        @endforeach
-    </div>
+            <div
+                class="mukmin-hero__slide js-hero-slide @if($si === 0) active @endif"
+                data-index="{{ $si }}"
+            >
+                <div class="mukmin-hero__media" aria-hidden="true">
+                    <div
+                        class="mukmin-hero__photo"
+                        style="background-image: url('{{ e($slide['image_url']) }}');"
+                        role="presentation"
+                    ></div>
+                </div>
 
-    <!-- Overlays -->
-    <div class="mukmin-hero__gradient" aria-hidden="true"></div>
-    <div class="mukmin-hero__vignette" aria-hidden="true"></div>
-
-    <!-- Content Slider -->
-    <div class="mukmin-hero__content-container">
-        @foreach ($allSlides as $si => $slide)
-            <div class="mukmin-hero__content-slide js-hero-content-slide @if($si === 0) active @endif" data-index="{{ $si }}">
-                <div class="mukmin-hero__layout-grid">
-                    <div class="mukmin-hero__layout-left">
+                <div class="mukmin-hero__card">
+                    <div class="mukmin-hero__card-inner">
                         @if ($slide['is_html_content'])
                             {!! $slide['html_headline'] !!}
+                            @if ($slide['html_sub'])
+                                {!! $slide['html_sub'] !!}
+                            @endif
                         @else
                             <h2 class="mukmin-hero__headline">
                                 {{ $slide['title'] }}
                             </h2>
-                        @endif
-                    </div>
-                    <div class="mukmin-hero__layout-right">
-                        @if ($slide['is_html_content'])
-                            {!! $slide['html_sub'] !!}
-                        @else
                             @if ($slide['description'])
                                 <div class="mukmin-hero__sub">
                                     <p class="mukmin-hero__subline">{{ $slide['description'] }}</p>
@@ -113,7 +103,7 @@
 
                         @if ($slide['link_url'] !== '')
                             <div class="mukmin-hero__cta">
-                                <a href="{{ $slide['link_url'] }}" 
+                                <a href="{{ $slide['link_url'] }}"
                                    @if ($slide['new_tab']) target="_blank" rel="noopener noreferrer" @endif
                                    class="btn hero-slider-cta-btn"
                                 >
@@ -133,7 +123,6 @@
         @endforeach
     </div>
 
-    <!-- Navigation Arrows -->
     @if (count($allSlides) > 1)
         <button type="button" class="hero-nav-btn hero-nav-btn--left js-hero-prev" aria-label="{{ __('Previous slide') }}">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
@@ -142,7 +131,6 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
         </button>
 
-        <!-- Bullet Indicators -->
         <div class="hero-indicators">
             @foreach ($allSlides as $si => $slide)
                 <button type="button" class="hero-indicator-dot js-hero-indicator @if($si === 0) active @endif" data-index="{{ $si }}" aria-label="{{ __('Go to slide :num', ['num' => $si + 1]) }}"></button>
@@ -155,14 +143,13 @@
         var hero = document.querySelector('.mukmin-hero');
         if (!hero) return;
 
-        var bgSlides = hero.querySelectorAll('.js-hero-bg-slide');
-        var contentSlides = hero.querySelectorAll('.js-hero-content-slide');
+        var slides = hero.querySelectorAll('.js-hero-slide');
         var dots = hero.querySelectorAll('.js-hero-indicator');
         var prevBtn = hero.querySelector('.js-hero-prev');
         var nextBtn = hero.querySelector('.js-hero-next');
 
         var currentIndex = 0;
-        var totalSlides = bgSlides.length;
+        var totalSlides = slides.length;
         if (totalSlides <= 1) return;
 
         var slideInterval = {{ $slideInterval * 1000 }};
@@ -178,8 +165,7 @@
 
             currentIndex = index;
 
-            // Update background slides
-            bgSlides.forEach(function (slide, i) {
+            slides.forEach(function (slide, i) {
                 if (i === currentIndex) {
                     slide.classList.add('active');
                 } else {
@@ -187,16 +173,6 @@
                 }
             });
 
-            // Update content slides
-            contentSlides.forEach(function (slide, i) {
-                if (i === currentIndex) {
-                    slide.classList.add('active');
-                } else {
-                    slide.classList.remove('active');
-                }
-            });
-
-            // Update dots
             dots.forEach(function (dot, i) {
                 if (i === currentIndex) {
                     dot.classList.add('active');
@@ -252,9 +228,6 @@
             });
         });
 
-        // Display states initialized by CSS grid active class
-
-        // Autoplay mouse events
         hero.addEventListener('mouseenter', stopTimer);
         hero.addEventListener('mouseleave', startTimer);
         hero.addEventListener('focusin', stopTimer);

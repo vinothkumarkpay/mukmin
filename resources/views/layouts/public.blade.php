@@ -462,114 +462,64 @@
             box-shadow: 0 2px 10px rgba(120, 53, 15, 0.18);
         }
 
-        /* ── Hero: immersive full-width banner ── */
-        .mukmin-hero {
-            position: relative;
-            background:
-                radial-gradient(ellipse 120% 90% at 50% -12%, rgba(230, 224, 216, 0.55) 0%, rgba(120, 108, 98, 0.12) 38%, transparent 64%),
-                linear-gradient(162deg, var(--mukmin-hero-g1) 0%, var(--mukmin-hero-g2) 48%, var(--mukmin-hero-g3) 100%);
-            color: #fff;
-            min-height: min(45vh, 440px);
+        /* ── Hero: split layout (image left, card right) ── */
+        .mukmin-hero--split {
+            --hero-card-heading: #0b5c47;
+            --hero-card-heading-accent: #0d9488;
+            --hero-card-heading-alt: #134e6f;
+            --hero-card-body: #3f5249;
+            --hero-card-muted: #5c6f68;
+            background: #f7f8f7;
+            color: var(--hero-card-body);
             overflow: hidden;
         }
 
-        .mukmin-hero__photo {
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            opacity: 1;
-            z-index: 0;
+        .mukmin-hero--split .mukmin-hero__headline,
+        .mukmin-hero--split .mukmin-hero__card h1,
+        .mukmin-hero--split .mukmin-hero__card h2 {
+            color: var(--hero-card-heading) !important;
+            font-family: var(--font-hero-display) !important;
+            font-weight: 800 !important;
+            line-height: 0.96 !important;
+            letter-spacing: -0.025em !important;
+            text-shadow: none !important;
         }
 
-        .mukmin-hero__gradient {
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(to top, rgba(15, 61, 44, 0.85) 0%, rgba(15, 61, 44, 0.5) 50%, rgba(0,0,0,0.15) 100%);
-            opacity: 1;
-            z-index: 1;
+        .mukmin-hero--split .mukmin-hero__line {
+            color: var(--hero-card-heading) !important;
         }
 
-        .mukmin-hero:has(.mukmin-hero__photo) .mukmin-hero__gradient {
-            opacity: 1;
+        .mukmin-hero--split .mukmin-hero__headline .mukmin-hero__line:nth-child(2) {
+            color: var(--hero-card-heading-accent) !important;
         }
 
-        .mukmin-hero__vignette {
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 100% 54% at 50% 0%, rgba(240, 235, 228, 0.12), transparent 54%),
-                radial-gradient(ellipse 88% 72% at 50% 108%, rgba(15, 61, 44, 0.25), transparent 58%);
-            z-index: 1;
+        .mukmin-hero--split .mukmin-hero__headline .mukmin-hero__line:nth-child(3) {
+            color: var(--hero-card-heading-alt) !important;
         }
 
-        .mukmin-hero:has(.mukmin-hero__photo) .mukmin-hero__vignette {
-            background:
-                radial-gradient(ellipse 96% 50% at 50% 0%, rgba(225, 218, 208, 0.12), transparent 52%),
-                radial-gradient(ellipse 90% 76% at 50% 110%, rgba(15, 61, 44, 0.3), transparent 62%);
+        .mukmin-hero--split .mukmin-hero__card em,
+        .mukmin-hero--split .mukmin-hero__card strong {
+            color: var(--hero-card-heading-accent) !important;
+            -webkit-text-fill-color: var(--hero-card-heading-accent) !important;
+            background: none !important;
+            font-style: normal !important;
+            font-weight: 800 !important;
         }
 
-        /* Side-panel now hidden — photo is full-bleed background */
-        .mukmin-hero__side-panel {
-            display: none;
+        .mukmin-hero--split .mukmin-hero__sub,
+        .mukmin-hero--split .mukmin-hero__sub p,
+        .mukmin-hero--split .mukmin-hero__subline {
+            font-family: var(--font-hero-sans) !important;
+            font-weight: 500 !important;
+            color: var(--hero-card-body) !important;
+            text-shadow: none !important;
         }
 
+        .mukmin-hero__side-panel,
         .mukmin-hero__side-panel__img,
         .mukmin-hero__side-panel__scrim,
         .mukmin-hero__side-panel-origin {
             display: none;
-        }
-
-        /* Headline typography: white with gradient accent */
-        .mukmin-hero__headline {
-            color: #ffffff;
-            font-family: var(--font-hero-display);
-            font-size: clamp(2.2rem, 6vw, 3.8rem);
-            font-weight: 800;
-            text-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.25),
-                0 0 40px rgba(13, 148, 136, 0.15);
-        }
-
-        /* CMS-body content inside hero (h1/h2/p rendered from widget content) */
-        .mukmin-hero__inner {
-            position: relative;
-            z-index: 3;
-        }
-
-        .mukmin-hero__inner h1,
-        .mukmin-hero__inner h2 {
-            color: #ffffff !important;
-            font-family: var(--font-hero-display);
-            font-weight: 800;
-            font-size: clamp(2.2rem, 6vw, 3.6rem);
-            text-shadow:
-                0 2px 8px rgba(0, 0, 0, 0.25),
-                0 0 40px rgba(13, 148, 136, 0.15);
-        }
-
-        .mukmin-hero__inner em,
-        .mukmin-hero__inner strong {
-            background: linear-gradient(to right, #fde047, #fb923c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-style: normal;
-        }
-
-        .mukmin-hero__inner p {
-            color: rgba(255, 255, 255, 0.88) !important;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .mukmin-hero__sub {
-            color: rgba(255, 255, 255, 0.85);
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .mukmin-hero__cta {
-            position: relative;
-            z-index: 3;
         }
     </style>
 </head>
